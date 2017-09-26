@@ -47,6 +47,7 @@ public class NeuralNetwork {
 		for(int i = 0; i < layers.length; i++){
 			neuronsList.add(new float[layers[i]]);
 		}
+		neurons = new float[neuronsList.size()][];
 		for(int i = 0; i < neuronsList.size(); i++){
 			neurons[i] = neuronsList.get(i);
 		}
@@ -65,12 +66,13 @@ public class NeuralNetwork {
 				}
 				layersWeight.add(neuronsWeight);
 			}
+			temp = new float[layersWeight.size()][];
 			for(int j = 0; j < layersWeight.size(); j++){
-				temp = new float[layersWeight.size()][];
 				temp[j] = layersWeight.get(j);
 			}
 			weightsList.add(temp);
 		}
+		weights = new float[weightsList.size()][][];
 		for(int i = 0; i < weightsList.size(); i++){
 			weights[i] = weightsList.get(i);
 		}
@@ -94,23 +96,24 @@ public class NeuralNetwork {
 		return neurons[neurons.length - 1];
 	}
 	
-	public void Mutate(){
+	public void Mutate(float chanceOfMutation){
+		float num = (chanceOfMutation / 4) * 1000;
 		for(int i = 0; i < weights.length; i++){
 			for (int j = 0; j < weights[i].length; j++){
 				for(int k = 0; k < weights[i][j].length; k++){
 					float weight = weights[i][j][k];
 					float rn = r.nextFloat() * 1000;
-					if(rn <= 2){
+					if(rn <= num){
 						weight *= -1;
 					}
-					else if(rn <= 4){
+					else if(rn <= num * 2){
 						weight = r.nextFloat() - .5f;
 					}
-					else if(rn <= 6){
+					else if(rn <= num * 3){
 						float factor = r.nextFloat() + 1f;
 						weight *= factor;
 					}
-					else if(rn <= 8){
+					else if(rn <= num * 4){
 						float factor = r.nextFloat();
 						weight *= factor;
 					}
