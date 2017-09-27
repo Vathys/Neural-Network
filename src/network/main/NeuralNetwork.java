@@ -88,7 +88,7 @@ public class NeuralNetwork {
 			for(int j = 0; j < neurons[i].length; j++){
 				double val = .25;
 				for(int k = 0; k < neurons[i-1].length;  k++){
-					val += weights[i-1][j][k] * neurons[i-1][j];
+					val += weights[i-1][j][k] * neurons[i-1][k];
 				}
 				neurons[i][j] = (float)Math.tanh(val);
 			}

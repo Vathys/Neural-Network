@@ -2,9 +2,9 @@ package network.main;
 
 public class Main {
 
-	public static void main(String[] args) {
-		int[] layers = {4, 4, 4, 3, 3};
-		float[] inputs = {1f, 1f, 1f, 1f};
+	public static void main(String[] args) throws InterruptedException {
+		int[] layers = {3, 25, 25, 3};
+		float[] inputs = {1f};
 		
 		/*
 		 * Simple Test to check Neural Code is working properly.
@@ -16,6 +16,7 @@ public class Main {
 		for(int j = 0; j < output.length; j++){
 			System.out.print(output[j] + " \t");
 		}
+		Thread.sleep(1000);
 		System.out.println();
 		for(int i = 0; i < 20; i++){
 			n.Mutate(.5f); //enter the chance of mutation in decimal
@@ -24,11 +25,7 @@ public class Main {
 				System.out.print(output[j] + " \t");
 			}
 			System.out.println();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			Thread.sleep(1000);
 		}
 	}
 }
