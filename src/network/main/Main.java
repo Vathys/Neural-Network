@@ -1,7 +1,7 @@
 package network.main;
 
 public class Main {
-
+	
 	public static void main(String[] args) throws InterruptedException {
 		int[] layers = {3, 25, 25, 3};
 		float[] inputs = {1f};
@@ -20,7 +20,7 @@ public class Main {
 		System.out.println();
 		for(int i = 0; i < 20; i++){
 			n.Mutate(.5f); //enter the chance of mutation in decimal
-			output = n.FeedForward(output);
+			output = n.FeedForward(output); // only works if number of output is the same as the number of input
 			for(int j = 0; j < output.length; j++){
 				System.out.print(output[j] + " \t");
 			}
