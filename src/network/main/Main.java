@@ -3,28 +3,25 @@ package network.main;
 public class Main {
 	
 	public static void main(String[] args) throws InterruptedException {
-		int[] layers = {3, 25, 25, 3};
-		float[] inputs = {1f};
+		int[] layers = {3, 4, 3};
+		Neuron[] inputs = new Neuron[layers[0]];
 		
+		for(int i = 0; i < inputs.length; i++){
+			inputs[i] = new Neuron(1f, NeuralStatus.Input);
+		}
 		/*
 		 * Simple Test to check Neural Code is working properly.
 		 * Prints out 20 iterations of a Feed Forward after a Mutation where there is a 50 percentage chance of a mutation
 		 * */
 		
 		NeuralNetwork n = new NeuralNetwork(layers);
-		float[] output = n.FeedForward(inputs);
-		for(int j = 0; j < output.length; j++){
-			System.out.print(output[j] + " \t");
-		}
+		NeuronLayer output = new NeuronLayer(n.FeedForward(inputs));
+		System.out.println(output.toString());
 		Thread.sleep(1000);
-		System.out.println();
 		for(int i = 0; i < 20; i++){
-			n.Mutate(.5f); //enter the chance of mutation in decimal
-			output = n.FeedForward(output); // only works if number of output is the same as the number of input
-			for(int j = 0; j < output.length; j++){
-				System.out.print(output[j] + " \t");
-			}
-			System.out.println();
+			n.mutate(.5f); //enter the chance of mutation in decimal
+			output = new NeuronLayer(n.FeedForward(inputs));
+			System.out.println(output.toString());
 			Thread.sleep(1000);
 		}
 	}

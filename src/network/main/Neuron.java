@@ -14,12 +14,31 @@ public class Neuron {
 	
 	private Random r;
 	
-	public Neuron(int numberOfConnectedNeurons, NeuralStatus status){
-		this.numberOfConnectedNeurons = numberOfConnectedNeurons;
+	public Neuron(float neuron, NeuralStatus status){
+		this.neuron = neuron;
 		this.status = status;
 		
-		Random r = new Random();
+		r = new Random();
+	}
+	
+	public Neuron(float neuron){
+		this.neuron = neuron;
 		
+		r = new Random();
+	}
+	
+	public Neuron(Neuron neuron){
+		this.neuron = neuron.neuron;
+		this.status = neuron.status;
+		this.numberOfConnectedNeurons = neuron.numberOfConnectedNeurons;
+		this.weight = neuron.weight;
+		this.weightDelta = neuron.weightDelta;
+		
+		r = new Random();
+	}
+	
+	public void initializeWeights(int numberOfConnectedNeurons){
+		this.numberOfConnectedNeurons = numberOfConnectedNeurons;
 		weight = new float[numberOfConnectedNeurons];
 		weightDelta = new float[numberOfConnectedNeurons];
 		
@@ -32,10 +51,51 @@ public class Neuron {
 			weight = null;
 			weightDelta = null;
 		}
-		
+	}
+	
+	public void updateStatus(NeuralStatus status){
+		this.status = status;
+	}
+	
+	public void addFloatToNeuron(float update){
+		neuron += update;
+	}
+	
+	public void tanHNeuron(){
+		neuron = (float) Math.tanh(neuron);
+	}
+	
+	public float getNeuron(){
+		return neuron;
 	}
 	
 	public float FeedForward(int indexOfOutputNeuron){
 		return neuron * weight[indexOfOutputNeuron];
+	}
+
+	public void mutate(float chance){
+		float rn = r.nextFloat() * 1000;
+		float num = (chance / 4) * 1000;
+		for(int i = 0; i < weight.length; i++){
+			if(rn <= num){
+				weight[i] *= -1;
+			}
+			else if(rn <= num * 2){
+				weight[i] = r.nextFloat() - .5f;
+			}
+			else if(rn <= num * 3){
+				float factor = r.nextFloat() + 1f;
+				weight[i] *= factor;
+			}
+			else if(rn <= num * 4){
+				float factor = r.nextFloat();
+				weight[i] *= factor;
+			}
+		}
+	}
+	
+	public String toString(){
+		String toString = "Neuron: " + neuron;
+		return toString;
 	}
 }
