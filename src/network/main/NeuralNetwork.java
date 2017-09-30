@@ -4,11 +4,13 @@ import java.util.Random;
 
 public class NeuralNetwork {
 	private int[] layers;
+	private float learningRate;
 	private NeuronLayer[] neuronLayer;
 	private Random r;
 	
-	public NeuralNetwork(int[] layers){
+	public NeuralNetwork(int[] layers, float learningRate){
 		this.layers =  new int[layers.length];
+		this.learningRate = learningRate;
 		for(int i = 0; i < layers.length; i++){
 			this.layers[i] = layers[i];
 		}
@@ -19,11 +21,11 @@ public class NeuralNetwork {
 	
 	private void initLayer(){
 		neuronLayer = new NeuronLayer[layers.length];
-		neuronLayer[0] = new NeuronLayer(layers[1], NeuralStatus.Input);
-		neuronLayer[layers.length - 1] = new NeuronLayer(0, NeuralStatus.Output);
+		neuronLayer[0] = new NeuronLayer(layers[1], NeuralStatus.Input, learningRate);
+		neuronLayer[layers.length - 1] = new NeuronLayer(0, NeuralStatus.Output, learningRate);
 		
 		for(int i = 1; i < layers.length - 1; i++){
-			 neuronLayer[i] = new NeuronLayer(layers[i + 1], NeuralStatus.Hidden);
+			 neuronLayer[i] = new NeuronLayer(layers[i + 1], NeuralStatus.Hidden, learningRate);
 		}
 	}
 
@@ -40,6 +42,17 @@ public class NeuralNetwork {
 	public void mutate(float chance){
 		for(int i = 0; i < neuronLayer.length - 1; i++){
 			neuronLayer[i].mutate(chance);
+		}
+	}
+
+	public void backProp(float[] expected){
+		for(int i = neuronLayer.length - 1; i >= 0; i--){
+			 if(neuronLayer[i].getStatus() == NeuralStatus.Output){
+				 neuronLayer[i].backPropInitial(expected);
+			 }
+			 else{
+				 neuronLayer[i].backPropHidden(neuronLayer[i + 1]);
+			 }
 		}
 	}
 }

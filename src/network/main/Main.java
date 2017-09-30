@@ -1,20 +1,42 @@
 package network.main;
 
+import java.util.Random;
+
 public class Main {
 	
 	public static void main(String[] args) throws InterruptedException {
-		int[] layers = {3, 4, 3};
+		int[] layers = {2, 24, 24, 1};
 		Neuron[] inputs = new Neuron[layers[0]];
-		
-		for(int i = 0; i < inputs.length; i++){
-			inputs[i] = new Neuron(1f, NeuralStatus.Input);
-		}
+		float[] expected = new float[layers[layers.length - 1]];
 		/*
-		 * Simple Test to check Neural Code is working properly.
-		 * Prints out 20 iterations of a Feed Forward after a Mutation where there is a 50 percentage chance of a mutation
+		 * OR
+		 * 
+		 * 0 || 0 -> 0
+		 * 1 || 0 -> 1
+		 * 0 || 1 -> 1
+		 * 1 || 1 -> 1
 		 * */
 		
-		NeuralNetwork n = new NeuralNetwork(layers);
+		Random r = new Random();
+		NeuralNetwork n = new NeuralNetwork(layers, .033f);
+		NeuronLayer output;
+		for(int i = 0; i < 100; i++){
+			for(int j = 0; j < inputs.length; j++){
+				float f = Math.round(r.nextFloat());
+				inputs[j] = new Neuron(f, NeuralStatus.Input);
+			}
+			if(inputs[0].getNeuron() == inputs[1].getNeuron() && inputs[0].getNeuron() == 0){
+				expected[0] = 0f;
+			}else{
+				expected[0] = 1f;
+			}
+			output = new NeuronLayer(n.FeedForward(inputs));
+			System.out.println(output.toString());
+			n.backProp(expected);
+		}
+		
+		/*
+		NeuralNetwork n = new NeuralNetwork(layers, 0.033f);
 		NeuronLayer output = new NeuronLayer(n.FeedForward(inputs));
 		System.out.println(output.toString());
 		Thread.sleep(1000);
@@ -24,5 +46,6 @@ public class Main {
 			System.out.println(output.toString());
 			Thread.sleep(1000);
 		}
+		*/
 	}
 }

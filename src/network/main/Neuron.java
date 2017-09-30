@@ -8,11 +8,20 @@ public class Neuron {
 	private NeuralStatus status;
 	
 	private int numberOfConnectedNeurons;
+	private float learningRate;
 	
 	private float[] weight;
 	private float[] weightDelta;
 	
 	private Random r;
+	
+	public Neuron(float neuron, NeuralStatus status, float learningRate){
+		this.neuron = neuron;
+		this.status = status;
+		this.learningRate = learningRate;
+		
+		r = new Random();
+	}
 	
 	public Neuron(float neuron, NeuralStatus status){
 		this.neuron = neuron;
@@ -33,11 +42,12 @@ public class Neuron {
 		this.numberOfConnectedNeurons = neuron.numberOfConnectedNeurons;
 		this.weight = neuron.weight;
 		this.weightDelta = neuron.weightDelta;
+		this.learningRate = neuron.learningRate;
 		
 		r = new Random();
 	}
 	
-	public void initializeWeights(int numberOfConnectedNeurons){
+	public void initWeights(int numberOfConnectedNeurons){
 		this.numberOfConnectedNeurons = numberOfConnectedNeurons;
 		weight = new float[numberOfConnectedNeurons];
 		weightDelta = new float[numberOfConnectedNeurons];
@@ -52,9 +62,25 @@ public class Neuron {
 			weightDelta = null;
 		}
 	}
-	
+
+	public void initWeightDelta(float[] gamma){
+		for(int i = 0; i < numberOfConnectedNeurons; i++){
+			weightDelta[i] = neuron * gamma[i];
+		}
+	}
+
 	public void updateStatus(NeuralStatus status){
 		this.status = status;
+	}
+	
+	public void updateLearningRate(float learningRate){
+		this.learningRate = learningRate;
+	}
+	
+	public void updateWeights(){
+		for(int i = 0; i < weight.length; i++){
+			weight[i] -= weightDelta[i] * learningRate;
+		}
 	}
 	
 	public void addFloatToNeuron(float update){

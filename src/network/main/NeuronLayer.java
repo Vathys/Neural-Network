@@ -5,16 +5,18 @@ public class NeuronLayer {
 	private int numberOfOutputs;
 	
 	private NeuralStatus layerStatus;
+	private float learningRate;
 	
-	private Neuron[] input;
+	private Neuron[] layerNeurons;
 	private Neuron[] output;
 	
 	private float[] gamma;
 	private float[] error;
 	
-	public NeuronLayer(int numberOfOutputs, NeuralStatus layerStatus){
+	public NeuronLayer(int numberOfOutputs, NeuralStatus layerStatus, float learningRate){
 		this.numberOfOutputs = numberOfOutputs;
 		this.layerStatus = layerStatus;
+		this.learningRate = learningRate;
 		
 		output = new Neuron[numberOfOutputs];
 		
@@ -23,39 +25,48 @@ public class NeuronLayer {
 	}
 	
 	public NeuronLayer(Neuron[] neurons){
-		input = new Neuron[neurons.length];
+		layerNeurons = new Neuron[neurons.length];
 		for(int i = 0; i < neurons.length; i++){
-			input[i] = new Neuron(neurons[i]);
+			layerNeurons[i] = new Neuron(neurons[i]);
 		}
 	}
 	
 	public NeuronLayer(NeuronLayer neuronLayer){
 		this.numberOfOutputs = neuronLayer.numberOfOutputs;
-		this.input = neuronLayer.input;
+		this.layerNeurons = neuronLayer.layerNeurons;
 		this.output = neuronLayer.output;
 		this.layerStatus = neuronLayer.layerStatus;
 		this.gamma = neuronLayer.gamma;
 		this.error = neuronLayer.error;
+		this.learningRate = neuronLayer.learningRate;
 	}
 
-	public Neuron[] getInput(){
-		return input;
+	public Neuron[] getLayerNeurons(){
+		return layerNeurons;
 	}
 	
 	public Neuron[] getOutput(){
 		return output;
 	}
 
+	public float[] getGamma(){
+		return gamma;
+	}
+	
+	public NeuralStatus getStatus(){
+		return layerStatus;
+	}
+	
 	public Neuron[] FeedForward(Neuron[] inputs){
-		input = new Neuron[inputs.length];
+		layerNeurons = new Neuron[inputs.length];
 		for(int i = 0; i < inputs.length; i++){
-			input[i] = new Neuron(inputs[i].getNeuron(), layerStatus);
-			input[i].initializeWeights(numberOfOutputs);
+			layerNeurons[i] = new Neuron(inputs[i].getNeuron(), layerStatus, learningRate);
+			layerNeurons[i].initWeights(numberOfOutputs);
 		}
 		for(int i = 0; i < output.length; i++){
-			output[i] = new Neuron(0, NeuralStatus.Unknown);
-			for(int j = 0; j < input.length; j++){
-				output[i].addFloatToNeuron(input[j].FeedForward(i));
+			output[i] = new Neuron(0, NeuralStatus.Unknown, learningRate);
+			for(int j = 0; j < layerNeurons.length; j++){
+				output[i].addFloatToNeuron(layerNeurons[j].FeedForward(i));
 			}
 			output[i].tanHNeuron();
 		}
@@ -63,17 +74,46 @@ public class NeuronLayer {
 	}
 	
 	public void mutate(float chance){
-		for(int i = 0; i < input.length; i++){
-			input[i].mutate(chance);
+		for(int i = 0; i < layerNeurons.length; i++){
+			layerNeurons[i].mutate(chance);
+		}
+	}
+	
+	public float tanHDer(float input){
+		return (1 - (input * input));
+	}
+	
+	public void backPropInitial(float[] expected){
+		for(int i = 0; i < expected.length; i++){
+			error[i] = output[i].getNeuron() - expected[i];
+		}
+		for(int i = 0; i < expected.length; i++){
+			gamma[i] = error[i] * tanHDer(output[i].getNeuron());
+		}
+		for(int i = 0; i < numberOfOutputs; i++){
+			layerNeurons[i].initWeightDelta(gamma);
+		}
+	}
+	
+	public void backPropHidden(NeuronLayer forwardLayer){
+		for(int i = 0; i < forwardLayer.layerNeurons.length; i++){
+			gamma[i] = 0;
+			for(int j = 0; j < forwardLayer.gamma.length; j++){
+				gamma[i] += forwardLayer.gamma[i] * forwardLayer.layerNeurons[j].getNeuron();
+			}
+			gamma[i] = tanHDer(gamma[i]);
+		}
+		for(int i = 0; i < numberOfOutputs; i++){
+			layerNeurons[i].initWeightDelta(gamma);
 		}
 	}
 	
 	public String toString(){
 		String toString = "Neurons: [";
-		for(int i = 0; i < input.length - 1; i++){
-			toString += input[i].toString() + ", \t\t";
+		for(int i = 0; i < layerNeurons.length - 1; i++){
+			toString += layerNeurons[i].toString() + ", \t\t";
 		}
-		toString += input[input.length - 1].toString() + "]";
+		toString += layerNeurons[layerNeurons.length - 1].toString() + "]";
 		return toString;
 	}
 }
