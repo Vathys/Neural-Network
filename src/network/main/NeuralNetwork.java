@@ -21,11 +21,11 @@ public class NeuralNetwork {
 	
 	private void initLayer(){
 		neuronLayer = new NeuronLayer[layers.length];
-		neuronLayer[0] = new NeuronLayer(layers[1], NeuralStatus.Input, learningRate);
-		neuronLayer[layers.length - 1] = new NeuronLayer(0, NeuralStatus.Output, learningRate);
+		neuronLayer[0] = new NeuronLayer(layers[0], layers[1], NeuralStatus.Input, learningRate);
+		neuronLayer[layers.length - 1] = new NeuronLayer(layers[layers.length - 1], 0, NeuralStatus.Output, learningRate);
 		
 		for(int i = 1; i < layers.length - 1; i++){
-			 neuronLayer[i] = new NeuronLayer(layers[i + 1], NeuralStatus.Hidden, learningRate);
+			 neuronLayer[i] = new NeuronLayer(layers[i], layers[i + 1], NeuralStatus.Hidden, learningRate);
 		}
 	}
 
