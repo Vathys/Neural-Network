@@ -71,6 +71,10 @@ public class NeuronLayer {
 		return gamma;
 	}
 	
+	public float[] getError(){
+		return error;
+	}
+	
 	public NeuralStatus getStatus(){
 		return layerStatus;
 	}
@@ -126,10 +130,10 @@ public class NeuronLayer {
 	
 	public String toString(){
 		String toString = "Neurons: [";
-		for(int i = 0; i < numberOfInputs - 1; i++){
-			toString += layerNeurons[i].toString() + ", \t\t";
+		for(int i = 0; i < layerNeurons.length - 1; i++){
+			toString += layerNeurons[i] + ", \t\t";
 		}
-		toString += layerNeurons[layerNeurons.length - 1].toString() + "]";
+		toString += layerNeurons[layerNeurons.length - 1] + "]";
 		return toString;
 	}
 }

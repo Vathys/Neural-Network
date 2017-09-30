@@ -29,6 +29,10 @@ public class NeuralNetwork {
 		}
 	}
 
+	public NeuronLayer getOutputLayer(){
+		return neuronLayer[neuronLayer.length - 1];
+	}
+	
 	public NeuronLayer FeedForward(Neuron[] inputs){
 		neuronLayer[0].FeedForward(inputs);
 		
@@ -46,13 +50,9 @@ public class NeuralNetwork {
 	}
 
 	public void backProp(float[] expected){
-		for(int i = neuronLayer.length - 1; i >= 0; i--){
-			 if(neuronLayer[i].getStatus() == NeuralStatus.Output){
-				 neuronLayer[i].backPropInitial(expected);
-			 }
-			 else{
-				 neuronLayer[i].backPropHidden(neuronLayer[i + 1]);
-			 }
+		neuronLayer[neuronLayer.length - 2].backPropInitial(expected);
+		for(int i = neuronLayer.length - 3; i >= 0; i--){
+			neuronLayer[i].backPropHidden(neuronLayer[i + 1]);
 		}
 	}
 }

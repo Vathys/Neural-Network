@@ -97,7 +97,7 @@ public class Neuron {
 		
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
-				weight[i] = r.nextFloat() - .5f;
+				weight[i] = (r.nextFloat() * 2) - 1f;
 			}
 		}
 		else{
