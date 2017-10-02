@@ -1,6 +1,12 @@
 package network.main;
 
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.io.FileWriter;
+
 
 public class Neuron {
 	private float neuron;
@@ -166,9 +172,71 @@ public class Neuron {
 			}
 		}
 	}
-	
+	public void CSVwriter(int number)
+	{
+		String NEW_LINE_SEPARATOR = "/n";
+		String COMMA_DELIMITER = ",";
+		
+		Object[] FILE_HEADER = { "Weight Number", "Weights"};
+		String filename = "Neuron" + number + ".csv";
+		ArrayList<String> objects = new ArrayList<String>();
+		for(int i = 0; i < weight.length; i++){
+			Float f = weight[i];
+			objects.add(f.toString());
+		}
+        FileWriter fileWriter = null;
+        try {
+        	
+        	            fileWriter = new FileWriter(filename);
+        	            fileWriter.append(FILE_HEADER.toString());
+        	
+        	            fileWriter.append(NEW_LINE_SEPARATOR);
+        	  	
+        	            for (int i = 0; i < weight.length; i++) {
+        	Float f = weight[i];
+        	                fileWriter.append(String.valueOf(i));
+        	
+        	                fileWriter.append(COMMA_DELIMITER);
+       
+        	                fileWriter.append(String.valueOf(f));
+        	
+        	                fileWriter.append(NEW_LINE_SEPARATOR);
+        	
+        	            }
+        	
+        	            System.out.println("CSV file was created successfully !!!");
+        	
+        	        } catch (Exception e) {
+        	
+        	            System.out.println("Error in CsvFileWriter !!!");
+        
+        	            e.printStackTrace();
+        	
+        	        } finally {
+        	
+        	            try {
+        	
+        	                fileWriter.flush();
+        	
+        	                fileWriter.close();
+        	
+        	            } catch (Exception e) {
+        	
+        	                System.out.println("Error while flushing/closing fileWriter !!!");
+        	
+        	                e.printStackTrace();
+        	
+        	            }
+        	
+        	        }
+        	
+        	    }
+        	
+        	
+
 	public String toString(){
 		String toString = String.valueOf(neuron);
 		return toString;
 	}
 }
+        
