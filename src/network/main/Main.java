@@ -10,7 +10,7 @@ public class Main {
 		float[] expected = new float[layers[layers.length - 1]];
 		
 		Random r = new Random();
-		NeuralNetwork n = new NeuralNetwork(layers, 5f);
+		NeuralNetwork n = new NeuralNetwork(layers, 1f);
 		NeuronLayer output;
 		/*
 		 * Testing 

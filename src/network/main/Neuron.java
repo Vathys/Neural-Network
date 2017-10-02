@@ -122,7 +122,7 @@ public class Neuron {
 	
 	public void updateWeights(){
 		for(int i = 0; i < weight.length; i++){
-			weight[i] += weightDelta[i] * learningRate;
+			weight[i] -= weightDelta[i] * learningRate;
 		}
 	}
 	
