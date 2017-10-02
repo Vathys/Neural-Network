@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Neuron {
 	private float neuron;
-	
+	/* wait can i edit this at all*/
 	private NeuralStatus status;
 	
 	private int numberOfConnectedNeurons;
