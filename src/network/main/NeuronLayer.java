@@ -112,6 +112,7 @@ public class NeuronLayer {
 		}
 		for(int i = 0; i < layerNeurons.length; i++){
 			layerNeurons[i].initWeightDelta(gamma);
+			layerNeurons[i].updateWeights();
 		}
 	}
 	
@@ -125,6 +126,7 @@ public class NeuronLayer {
 		}
 		for(int i = 0; i < layerNeurons.length; i++){
 			layerNeurons[i].initWeightDelta(gamma);
+			layerNeurons[i].updateWeights();
 		}
 	}
 	
