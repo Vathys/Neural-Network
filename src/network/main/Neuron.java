@@ -176,8 +176,13 @@ public class Neuron {
 			}
 		}
 	}
+<<<<<<< HEAD
 	public void CSVwriter(int number) throws FileNotFoundException,  IOException
 	{
+=======
+	
+	public void CSVwriter(int number){
+>>>>>>> 1c417cde534e9cb572a986a2dcad3cd2108a9b9e
 		String NEW_LINE_SEPARATOR = "/n";
 		String COMMA_DELIMITER = ",";
 		
@@ -186,6 +191,7 @@ public class Neuron {
 		//File csv = new File("filename");
 		//csv.createNewFile();
 		ArrayList<String> objects = new ArrayList<String>();
+<<<<<<< HEAD
 		//for(int i = 0; i < weight.length; i++){
 			//Float f = weight[i];
 			//objects.add(f.toString());
@@ -242,8 +248,44 @@ public class Neuron {
         	
         	    }
         	
+=======
+		for(int i = 0; i < weight.length; i++){
+			Float f = weight[i];
+			objects.add(f.toString());
+		}
+		
+        FileWriter fileWriter = null;
+        
+        try {
+        	fileWriter = new FileWriter(filename);
+        	fileWriter.append(FILE_HEADER.toString());
+        	fileWriter.append(NEW_LINE_SEPARATOR);
+        	  	
+        	for (int i = 0; i < weight.length; i++) {
+        		Float f = weight[i];
+        		
+        		fileWriter.append(String.valueOf(i));
+        		fileWriter.append(COMMA_DELIMITER);
+        	    fileWriter.append(String.valueOf(f));
+        	    fileWriter.append(NEW_LINE_SEPARATOR);
+        	}
         	
-
+        	System.out.println("CSV file was created successfully !!!");
+        } catch (Exception e) {
+        	System.out.println("Error in CsvFileWriter !!!");
+        	e.printStackTrace();
+        } finally {
+        	try {
+        		fileWriter.flush();
+        	    fileWriter.close();
+        	} catch (Exception e) {
+        		System.out.println("Error while flushing/closing fileWriter !!!");
+        	    e.printStackTrace();
+        	}
+        }	
+	}
+>>>>>>> 1c417cde534e9cb572a986a2dcad3cd2108a9b9e
+        	
 	public String toString(){
 		String toString = String.valueOf(neuron);
 		return toString;
