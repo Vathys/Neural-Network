@@ -1,11 +1,15 @@
 package network.main;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 
 
 public class Neuron {
@@ -172,63 +176,69 @@ public class Neuron {
 			}
 		}
 	}
-	public void CSVwriter(int number)
+	public void CSVwriter(int number) throws FileNotFoundException,  IOException
 	{
 		String NEW_LINE_SEPARATOR = "/n";
 		String COMMA_DELIMITER = ",";
 		
 		Object[] FILE_HEADER = { "Weight Number", "Weights"};
 		String filename = "Neuron" + number + ".csv";
+		//File csv = new File("filename");
+		//csv.createNewFile();
 		ArrayList<String> objects = new ArrayList<String>();
-		for(int i = 0; i < weight.length; i++){
-			Float f = weight[i];
-			objects.add(f.toString());
-		}
+		//for(int i = 0; i < weight.length; i++){
+			//Float f = weight[i];
+			//objects.add(f.toString());
+		//}
         FileWriter fileWriter = null;
-        try {
-        	
-        	            fileWriter = new FileWriter(filename);
-        	            fileWriter.append(FILE_HEADER.toString());
-        	
-        	            fileWriter.append(NEW_LINE_SEPARATOR);
+        
+        //try {
+        				PrintWriter pw = new PrintWriter(new File(filename));
+        	            //fileWriter = new FileWriter(filename);
+        	            pw.append("Weight Number");
+        	            pw.append(",");
+        	            pw.append("Weights");
+        	            System.out.println(filename);
+        	            pw.append("\n");
         	  	
-        	            for (int i = 0; i < weight.length; i++) {
-        	Float f = weight[i];
-        	                fileWriter.append(String.valueOf(i));
+        	            //for (int i = 0; i < weight.length; i++) {
+        	//Float f = weight[i];
+        	                pw.append("test");
         	
-        	                fileWriter.append(COMMA_DELIMITER);
+        	                pw.append(",");
        
-        	                fileWriter.append(String.valueOf(f));
+        	                pw.append("Test2");
         	
-        	                fileWriter.append(NEW_LINE_SEPARATOR);
+        	                pw.append("\n");
         	
-        	            }
+        	            //}
         	
         	            System.out.println("CSV file was created successfully !!!");
+        	            pw.close();
         	
-        	        } catch (Exception e) {
+        	       // } catch (Exception e) {
         	
-        	            System.out.println("Error in CsvFileWriter !!!");
+        	            //System.out.println("Error in CsvFileWriter !!!");
         
-        	            e.printStackTrace();
+        	            //e.printStackTrace();
         	
-        	        } finally {
+        	        //} finally {
         	
-        	            try {
+        	            //try {
         	
-        	                fileWriter.flush();
+        	                //fileWriter.flush();
         	
-        	                fileWriter.close();
+        	               // fileWriter.close();
         	
-        	            } catch (Exception e) {
+        	            //} catch (IOException e) {
         	
-        	                System.out.println("Error while flushing/closing fileWriter !!!");
+        	               // System.out.println("Error while flushing/closing fileWriter !!!");
         	
-        	                e.printStackTrace();
+        	               // e.printStackTrace();
         	
-        	            }
+        	          //  }
         	
-        	        }
+        	       // }
         	
         	    }
         	

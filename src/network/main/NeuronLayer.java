@@ -1,5 +1,7 @@
 package network.main;
 
+import java.io.IOException;
+
 public class NeuronLayer {
 	
 	private int numberOfOutputs;
@@ -42,10 +44,11 @@ public class NeuronLayer {
 		error = new float[numberOfOutputs];
 	}
 	
-	public NeuronLayer(Neuron[] neurons){
+	public NeuronLayer(Neuron[] neurons) throws IOException{
 		layerNeurons = new Neuron[neurons.length];
 		for(int i = 0; i < neurons.length; i++){
 			layerNeurons[i] = new Neuron(neurons[i]);
+			layerNeurons[i].CSVwriter(i);
 		}
 	}
 	
