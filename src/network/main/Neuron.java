@@ -200,10 +200,12 @@ public class Neuron {
 		//File csv = new File("filename");
 		//csv.createNewFile();
 		ArrayList<String> objects = new ArrayList<String>();
-		//for(int i = 0; i < weight.length; i++){
-			//Float f = weight[i];
-			//objects.add(f.toString());
-		//}
+
+		for(int i = 0; i < weight.length; i++){
+			BigDecimal f = weight[i];
+			objects.add(f.toString());
+		}
+
         FileWriter fileWriter = null;
         
         //try {

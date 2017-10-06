@@ -1,5 +1,6 @@
 package network.main;
 
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -42,12 +43,11 @@ public class Main {
 		NeuralNetwork n = new NeuralNetwork(layers, BigDecimal.valueOf(learningRate));
 		NeuronLayer output;
 		int numberOfIterations = 100;
-        
+
 		/*
 		 * Testing 
 		 * f(x, y) = (x + 5^(1/2))/y
 		 **/
-        
         inputs[0] = new Neuron(1f);
         dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
         inputs[0].CSVwriter(0);
@@ -60,7 +60,7 @@ public class Main {
 			inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
 			dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
 			dinputs[1] = new Neuron(reduce(inputs[1].getNeuron()));
-            
+
 			System.out.println("Trial: " + i);
 			
             n.FeedForward(dinputs);
@@ -76,6 +76,7 @@ public class Main {
 			System.out.println((output.getLayerNeurons()[0].getNeuron()) + " : "+ dexpected[0]);
 			//System.out.println(inverseReduce(dexpected[0]));
 			System.out.println("-------------------------------------------------------------");
+
 		}
 		long endTime = System.nanoTime();
 		System.out.println(endTime - startTime);
