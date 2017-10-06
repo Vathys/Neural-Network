@@ -217,6 +217,7 @@ public class Neuron {
         	            System.out.println(filename);
         	            pw.append("\n");
         	  	
+
         	            //for (int i = 0; i < weight.length; i++) {
         	//Float f = weight[i];
         	                pw.append("test");

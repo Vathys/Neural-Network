@@ -1,6 +1,5 @@
 package network.main;
 
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -48,6 +47,7 @@ public class Main {
 		 * Testing 
 		 * f(x, y) = (x + 5^(1/2))/y
 		 **/
+
         inputs[0] = new Neuron(BigDecimal.ONE);
         dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
         inputs[0].CSVwriter(0);
@@ -60,7 +60,7 @@ public class Main {
 			inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
 			dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
 			dinputs[1] = new Neuron(reduce(inputs[1].getNeuron()));
-
+      
 			System.out.println("Trial: " + i);
 			
             n.FeedForward(dinputs);
