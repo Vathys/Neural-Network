@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,19 +14,19 @@ import java.io.PrintWriter;
 
 
 public class Neuron {
-	private float neuron;
-	/* wait can i edit this at all*/
+	private BigDecimal neuron;
+	
 	private NeuralStatus status;
 	
 	private int numberOfConnectedNeurons;
-	private float learningRate;
+	private BigDecimal learningRate;
 	
-	private float[] weight;
-	private float[] weightDelta;
+	private BigDecimal[] weight;
+	private BigDecimal[] weightDelta;
 	
 	private Random r;
 	
-	public Neuron(float neuron, int numberOfConnectedNeurons, NeuralStatus status, float learningRate){
+	public Neuron(BigDecimal neuron, int numberOfConnectedNeurons, NeuralStatus status, BigDecimal learningRate){
 		this.neuron = neuron;
 		this.status = status;
 		this.learningRate = learningRate;
@@ -33,12 +34,13 @@ public class Neuron {
 		r = new Random();
 		
 		this.numberOfConnectedNeurons = numberOfConnectedNeurons;
-		weight = new float[numberOfConnectedNeurons];
-		weightDelta = new float[numberOfConnectedNeurons];
+		weight = new BigDecimal[numberOfConnectedNeurons];
+		weightDelta = new BigDecimal[numberOfConnectedNeurons];
 		
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
-				weight[i] = r.nextFloat() - .5f;
+				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
+				weightDelta[i] = BigDecimal.ONE;
 			}
 		}
 		else{
@@ -47,19 +49,20 @@ public class Neuron {
 		}
 	}
 
-	public Neuron(int numberOfConnectedNeurons, NeuralStatus status, float learningRate){
+	public Neuron(int numberOfConnectedNeurons, NeuralStatus status, BigDecimal learningRate){
 		this.status = status;
 		this.learningRate = learningRate;
 		
 		r = new Random();
 		
 		this.numberOfConnectedNeurons = numberOfConnectedNeurons;
-		weight = new float[numberOfConnectedNeurons];
-		weightDelta = new float[numberOfConnectedNeurons];
+		weight = new BigDecimal[numberOfConnectedNeurons];
+		weightDelta = new BigDecimal[numberOfConnectedNeurons];
 		
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
-				weight[i] = r.nextFloat() - .5f;
+				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
+				weightDelta[i] = BigDecimal.ONE;
 			}
 		}
 		else{
@@ -68,7 +71,7 @@ public class Neuron {
 		}
 	}
 	
-	public Neuron(float neuron, NeuralStatus status, float learningRate){
+	public Neuron(BigDecimal neuron, NeuralStatus status, BigDecimal learningRate){
 		this.neuron = neuron;
 		this.status = status;
 		this.learningRate = learningRate;
@@ -76,14 +79,14 @@ public class Neuron {
 		r = new Random();
 	}
 	
-	public Neuron(float neuron, NeuralStatus status){
+	public Neuron(BigDecimal neuron, NeuralStatus status){
 		this.neuron = neuron;
 		this.status = status;
 		
 		r = new Random();
 	}
 	
-	public Neuron(float neuron){
+	public Neuron(BigDecimal neuron){
 		this.neuron = neuron;
 		
 		r = new Random();
@@ -102,12 +105,13 @@ public class Neuron {
 	
 	public void initWeights(int numberOfConnectedNeurons){
 		this.numberOfConnectedNeurons = numberOfConnectedNeurons;
-		weight = new float[numberOfConnectedNeurons];
-		weightDelta = new float[numberOfConnectedNeurons];
+		weight = new BigDecimal[numberOfConnectedNeurons];
+		weightDelta = new BigDecimal[numberOfConnectedNeurons];
 		
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
-				weight[i] = (r.nextFloat() * 2) - 1f;
+				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
+				System.out.println(weight[i]);
 			}
 		}
 		else{
@@ -116,9 +120,13 @@ public class Neuron {
 		}
 	}
 
-	public void initWeightDelta(float[] gamma){
+	public void initWeightDelta(BigDecimal[] gamma){
 		for(int i = 0; i < numberOfConnectedNeurons; i++){
-			weightDelta[i] = neuron * gamma[i];
+			//System.out.println("Before Delta " + i + " : " + weightDelta[i]);
+			//System.out.println("Gamma " + i + " : " + gamma[i]);
+			//System.out.println("Neuron " + i + " : " + neuron);
+			weightDelta[i] = neuron.multiply(gamma[i]);
+			//System.out.println("Times Gamma " + i + " : " + weightDelta[i]);
 		}
 	}
 
@@ -126,34 +134,39 @@ public class Neuron {
 		this.status = status;
 	}
 	
-	public void updateLearningRate(float learningRate){
+	public void updateLearningRate(BigDecimal learningRate){
 		this.learningRate = learningRate;
 	}
 	
 	public void updateWeights(){
 		for(int i = 0; i < weight.length; i++){
-			weight[i] -= weightDelta[i] * learningRate;
+			//System.out.println("Before Change " + i + " : " + weight[i]);
+			//System.out.println(weightDelta[i].multiply(learningRate));
+			weight[i] = weight[i].subtract(weightDelta[i].multiply(learningRate));
+			//System.out.println("After Change " + i + " : " + weight[i]);
 		}
 	}
 	
-	public void addFloatToNeuron(float update){
-		neuron += update;
+	public void addToNeuron(BigDecimal update){
+		neuron = neuron.add(update);
 	}
 	
 	public void tanHNeuron(){
-		neuron = (float) Math.tanh(neuron);
+		neuron = BigDecimal.valueOf(Math.tanh(neuron.doubleValue()));
 	}
 	
-	public float getNeuron(){
+	public BigDecimal getNeuron(){
 		return neuron;
 	}
 	
-	public void setNeuron(float neuron){
+	public void setNeuron(BigDecimal neuron){
 		this.neuron = neuron;
 	}
 	
-	public float FeedForward(int indexOfOutputNeuron){
-		return neuron * weight[indexOfOutputNeuron];
+	public BigDecimal FeedForward(int indexOfOutputNeuron){
+		//System.out.println(weight[indexOfOutputNeuron]);
+		this.neuron = neuron.multiply(weight[indexOfOutputNeuron]);
+		return this.neuron;
 	}
 
 	public void mutate(float chance){
@@ -161,28 +174,24 @@ public class Neuron {
 		float num = (chance / 4) * 1000;
 		for(int i = 0; i < weight.length; i++){
 			if(rn <= num){
-				weight[i] *= -1;
+				weight[i].negate();
 			}
 			else if(rn <= num * 2){
-				weight[i] = r.nextFloat() - .5f;
+				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
 			}
 			else if(rn <= num * 3){
-				float factor = r.nextFloat() + 1f;
-				weight[i] *= factor;
+				BigDecimal factor = new BigDecimal(String.valueOf(r.nextFloat() + 1f));
+				weight[i].multiply(factor);
 			}
 			else if(rn <= num * 4){
-				float factor = r.nextFloat();
-				weight[i] *= factor;
+				BigDecimal factor = new BigDecimal(String.valueOf(r.nextFloat()));
+				weight[i].multiply(factor);
 			}
 		}
 	}
-<<<<<<< HEAD
-	public void CSVwriter(int number) throws FileNotFoundException,  IOException
-	{
-=======
-	
-	public void CSVwriter(int number){
->>>>>>> 1c417cde534e9cb572a986a2dcad3cd2108a9b9e
+    
+	public void CSVwriter(int number) throws FileNotFoundException,  IOException{
+
 		String NEW_LINE_SEPARATOR = "/n";
 		String COMMA_DELIMITER = ",";
 		
@@ -191,7 +200,6 @@ public class Neuron {
 		//File csv = new File("filename");
 		//csv.createNewFile();
 		ArrayList<String> objects = new ArrayList<String>();
-<<<<<<< HEAD
 		//for(int i = 0; i < weight.length; i++){
 			//Float f = weight[i];
 			//objects.add(f.toString());
@@ -247,44 +255,6 @@ public class Neuron {
         	       // }
         	
         	    }
-        	
-=======
-		for(int i = 0; i < weight.length; i++){
-			Float f = weight[i];
-			objects.add(f.toString());
-		}
-		
-        FileWriter fileWriter = null;
-        
-        try {
-        	fileWriter = new FileWriter(filename);
-        	fileWriter.append(FILE_HEADER.toString());
-        	fileWriter.append(NEW_LINE_SEPARATOR);
-        	  	
-        	for (int i = 0; i < weight.length; i++) {
-        		Float f = weight[i];
-        		
-        		fileWriter.append(String.valueOf(i));
-        		fileWriter.append(COMMA_DELIMITER);
-        	    fileWriter.append(String.valueOf(f));
-        	    fileWriter.append(NEW_LINE_SEPARATOR);
-        	}
-        	
-        	System.out.println("CSV file was created successfully !!!");
-        } catch (Exception e) {
-        	System.out.println("Error in CsvFileWriter !!!");
-        	e.printStackTrace();
-        } finally {
-        	try {
-        		fileWriter.flush();
-        	    fileWriter.close();
-        	} catch (Exception e) {
-        		System.out.println("Error while flushing/closing fileWriter !!!");
-        	    e.printStackTrace();
-        	}
-        }	
-	}
->>>>>>> 1c417cde534e9cb572a986a2dcad3cd2108a9b9e
         	
 	public String toString(){
 		String toString = String.valueOf(neuron);

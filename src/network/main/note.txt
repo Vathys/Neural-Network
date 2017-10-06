@@ -1,0 +1,1 @@
+Hey i messed up and kind of broke everything so i wont commit the code today, however the csv should work with the big int if it is a better solution then float. Also the csv writer will be two classes. One which initally creates the files and one that adds to them/overwrites them depending on how we want to orginize it
