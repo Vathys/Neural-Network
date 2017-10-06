@@ -44,7 +44,7 @@ public class Main {
 		 * Testing 
 		 * f(x, y) = (x + 5^(1/2))/y
 		 **/
-		
+		long startTime = System.nanoTime();
 		for(int i = 1; i <= numberOfIterations; i++){
 			inputs[0] = new Neuron(BigDecimal.ONE);
 			inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
@@ -56,10 +56,12 @@ public class Main {
 			expected[0] = testFunc(inputs[0].getNeuron(), inputs[1].getNeuron());
 			dexpected[0] = reduce(expected[0]);
 			n.backProp(dexpected);
-			System.out.println(inverseReduce(output.getLayerNeurons()[0].getNeuron()) + " : "+ expected[0]);
+			System.out.println((output.getLayerNeurons()[0].getNeuron()) + " : "+ dexpected[0]);
 			//System.out.println(inverseReduce(dexpected[0]));
-			System.out.println(dexpected[0] + "\n-------------------------------------------------------------");
+			System.out.println("\n-------------------------------------------------------------");
 		}
+		long endTime = System.nanoTime();
+		System.out.println(endTime - startTime);
 		/*
 		for(int i = 1; i < 100; i++){
 			System.out.println("Trial: " + i);
