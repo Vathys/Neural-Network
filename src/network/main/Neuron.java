@@ -36,6 +36,7 @@ public class Neuron {
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
 				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
+				weightDelta[i] = BigDecimal.ONE;
 			}
 		}
 		else{
@@ -57,6 +58,7 @@ public class Neuron {
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
 				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
+				weightDelta[i] = BigDecimal.ONE;
 			}
 		}
 		else{
@@ -105,6 +107,7 @@ public class Neuron {
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
 				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
+				System.out.println(weight[i]);
 			}
 		}
 		else{
@@ -115,7 +118,11 @@ public class Neuron {
 
 	public void initWeightDelta(BigDecimal[] gamma){
 		for(int i = 0; i < numberOfConnectedNeurons; i++){
+			//System.out.println("Before Delta " + i + " : " + weightDelta[i]);
+			//System.out.println("Gamma " + i + " : " + gamma[i]);
+			//System.out.println("Neuron " + i + " : " + neuron);
 			weightDelta[i] = neuron.multiply(gamma[i]);
+			//System.out.println("Times Gamma " + i + " : " + weightDelta[i]);
 		}
 	}
 
@@ -129,13 +136,15 @@ public class Neuron {
 	
 	public void updateWeights(){
 		for(int i = 0; i < weight.length; i++){
-			weight[i].subtract(weightDelta[i].multiply(learningRate));
+			//System.out.println("Before Change " + i + " : " + weight[i]);
+			//System.out.println(weightDelta[i].multiply(learningRate));
+			weight[i] = weight[i].subtract(weightDelta[i].multiply(learningRate));
+			//System.out.println("After Change " + i + " : " + weight[i]);
 		}
 	}
 	
 	public void addToNeuron(BigDecimal update){
-		neuron.toString();
-		neuron.add(update);
+		neuron = neuron.add(update);
 	}
 	
 	public void tanHNeuron(){
@@ -151,7 +160,9 @@ public class Neuron {
 	}
 	
 	public BigDecimal FeedForward(int indexOfOutputNeuron){
-		return neuron.multiply(weight[indexOfOutputNeuron]);
+		//System.out.println(weight[indexOfOutputNeuron]);
+		this.neuron = neuron.multiply(weight[indexOfOutputNeuron]);
+		return this.neuron;
 	}
 
 	public void mutate(float chance){

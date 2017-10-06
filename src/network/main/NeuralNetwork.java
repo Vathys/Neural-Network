@@ -38,6 +38,11 @@ public class NeuralNetwork {
 		neuronLayer[0].FeedForward(inputs);
 		
 		for(int i = 1; i < neuronLayer.length; i++){
+			/*Neuron[] val = neuronLayer[i - 1].getOutput();
+			for(int j = 0; j < val.length; j++){
+				System.out.print(val[j] + " | ");
+			}
+			System.out.println("\n");*/
 			neuronLayer[i].FeedForward(neuronLayer[i - 1].getOutput());
 		}
 		
@@ -53,6 +58,7 @@ public class NeuralNetwork {
 	public void backProp(BigDecimal[] expected){
 		neuronLayer[neuronLayer.length - 2].backPropInitial(expected);
 		for(int i = neuronLayer.length - 3; i >= 0; i--){
+			//System.out.println("--------------------------------------------------------------------------------------------");
 			neuronLayer[i].backPropHidden(neuronLayer[i + 1]);
 		}
 	}
