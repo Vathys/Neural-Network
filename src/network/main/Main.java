@@ -1,5 +1,7 @@
 package network.main;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Random;
 
@@ -40,25 +42,41 @@ public class Main {
 		NeuralNetwork n = new NeuralNetwork(layers, BigDecimal.valueOf(learningRate));
 		NeuronLayer output;
 		int numberOfIterations = 100;
+
 		/*
 		 * Testing 
 		 * f(x, y) = (x + 5^(1/2))/y
 		 **/
+
+        inputs[0] = new Neuron(1f);
+        dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
+        inputs[0].CSVwriter(0);
+        inputs[1] = new Neuron(2f);
+        dinputs[1] = new Neuron(reduce(inputs[1].getNeuron()));
+        inputs[1].CSVwriter(1);
 		long startTime = System.nanoTime();
 		for(int i = 1; i <= numberOfIterations; i++){
 			inputs[0] = new Neuron(BigDecimal.ONE);
 			inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
 			dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
 			dinputs[1] = new Neuron(reduce(inputs[1].getNeuron()));
+      
 			System.out.println("Trial: " + i);
-			n.FeedForward(dinputs);
+			
+            n.FeedForward(dinputs);
 			output = new NeuronLayer(n.getOutputLayer());
+            
 			expected[0] = testFunc(inputs[0].getNeuron(), inputs[1].getNeuron());
 			dexpected[0] = reduce(expected[0]);
+            
 			n.backProp(dexpected);
+            inputs[0].CSVwriter(0);
+            inputs[1].CSVwriter(1);
+            
 			System.out.println((output.getLayerNeurons()[0].getNeuron()) + " : "+ dexpected[0]);
 			//System.out.println(inverseReduce(dexpected[0]));
-			System.out.println("\n-------------------------------------------------------------");
+			System.out.println("-------------------------------------------------------------");
+
 		}
 		long endTime = System.nanoTime();
 		System.out.println(endTime - startTime);
