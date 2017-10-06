@@ -1,20 +1,22 @@
 package network.main;
 
+import java.math.BigDecimal;
+
 public class NeuronLayer {
 	
 	private int numberOfOutputs;
 	private int numberOfInputs;
 	
 	private NeuralStatus layerStatus;
-	private float learningRate;
+	private BigDecimal learningRate;
 	
 	private Neuron[] layerNeurons;
 	private Neuron[] output;
 	
-	private float[] gamma;
-	private float[] error;
+	private BigDecimal[] gamma;
+	private BigDecimal[] error;
 	
-	public NeuronLayer(int numberOfInputs, int numberOfOutputs, NeuralStatus layerStatus, float learningRate){
+	public NeuronLayer(int numberOfInputs, int numberOfOutputs, NeuralStatus layerStatus, BigDecimal learningRate){
 		this.numberOfOutputs = numberOfOutputs;
 		this.numberOfInputs = numberOfInputs;
 		this.layerStatus = layerStatus;
@@ -23,23 +25,23 @@ public class NeuronLayer {
 		layerNeurons = new Neuron[numberOfInputs];
 		output = new Neuron[numberOfOutputs];
 		
-		gamma = new float[numberOfOutputs];
-		error = new float[numberOfOutputs];
+		gamma = new BigDecimal[numberOfOutputs];
+		error = new BigDecimal[numberOfOutputs];
 		
 		for(int i = 0; i < numberOfInputs; i++){
 			layerNeurons[i] = new Neuron(numberOfOutputs, layerStatus, learningRate);
 		}
 	}
 	
-	public NeuronLayer(int numberOfOutputs, NeuralStatus layerStatus, float learningRate){
+	public NeuronLayer(int numberOfOutputs, NeuralStatus layerStatus, BigDecimal learningRate){
 		this.numberOfOutputs = numberOfOutputs;
 		this.layerStatus = layerStatus;
 		this.learningRate = learningRate;
 		
 		output = new Neuron[numberOfOutputs];
 		
-		gamma = new float[numberOfOutputs];
-		error = new float[numberOfOutputs];
+		gamma = new BigDecimal[numberOfOutputs];
+		error = new BigDecimal[numberOfOutputs];
 	}
 	
 	public NeuronLayer(Neuron[] neurons){
@@ -67,11 +69,11 @@ public class NeuronLayer {
 		return output;
 	}
 
-	public float[] getGamma(){
+	public BigDecimal[] getGamma(){
 		return gamma;
 	}
 	
-	public float[] getError(){
+	public BigDecimal[] getError(){
 		return error;
 	}
 	
@@ -86,7 +88,7 @@ public class NeuronLayer {
 		for(int i = 0; i < output.length; i++){
 			output[i] = new Neuron(0, NeuralStatus.Unknown, learningRate);
 			for(int j = 0; j < layerNeurons.length; j++){
-				output[i].addFloatToNeuron(layerNeurons[j].FeedForward(i));
+				output[i].addToNeuron(layerNeurons[j].FeedForward(i));
 			}
 			output[i].tanHNeuron();
 		}
@@ -99,16 +101,16 @@ public class NeuronLayer {
 		}
 	}
 	
-	public float tanHDer(float input){
-		return (1 - (input * input));
+	public BigDecimal tanHDer(BigDecimal input){
+		return input.multiply(input).subtract(BigDecimal.ONE);
 	}
 	
-	public void backPropInitial(float[] expected){
+	public void backPropInitial(BigDecimal[] expected){
 		for(int i = 0; i < numberOfOutputs; i++){
-			error[i] = output[i].getNeuron() - expected[i];
+			error[i] = output[i].getNeuron().subtract(expected[i]);
 		}
 		for(int i = 0; i < numberOfOutputs; i++){
-			gamma[i] = error[i] * tanHDer(output[i].getNeuron());
+			gamma[i] = error[i].multiply(tanHDer(output[i].getNeuron()));
 		}
 		for(int i = 0; i < layerNeurons.length; i++){
 			layerNeurons[i].initWeightDelta(gamma);
@@ -118,9 +120,9 @@ public class NeuronLayer {
 	
 	public void backPropHidden(NeuronLayer forwardLayer){
 		for(int i = 0; i < forwardLayer.layerNeurons.length; i++){
-			gamma[i] = 0;
+			gamma[i] = BigDecimal.ZERO;
 			for(int j = 0; j < forwardLayer.gamma.length; j++){
-				gamma[i] += forwardLayer.gamma[j] * forwardLayer.layerNeurons[i].getNeuron();
+				gamma[i].add(forwardLayer.gamma[j].multiply(forwardLayer.layerNeurons[i].getNeuron()));
 			}
 			gamma[i] = tanHDer(gamma[i]);
 		}

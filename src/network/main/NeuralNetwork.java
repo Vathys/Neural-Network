@@ -1,14 +1,15 @@
 package network.main;
 
+import java.math.BigDecimal;
 import java.util.Random;
 
 public class NeuralNetwork {
 	private int[] layers;
-	private float learningRate;
+	private BigDecimal learningRate;
 	private NeuronLayer[] neuronLayer;
 	private Random r;
 	
-	public NeuralNetwork(int[] layers, float learningRate){
+	public NeuralNetwork(int[] layers, BigDecimal learningRate){
 		this.layers =  new int[layers.length];
 		this.learningRate = learningRate;
 		for(int i = 0; i < layers.length; i++){
@@ -49,7 +50,7 @@ public class NeuralNetwork {
 		}
 	}
 
-	public void backProp(float[] expected){
+	public void backProp(BigDecimal[] expected){
 		neuronLayer[neuronLayer.length - 2].backPropInitial(expected);
 		for(int i = neuronLayer.length - 3; i >= 0; i--){
 			neuronLayer[i].backPropHidden(neuronLayer[i + 1]);

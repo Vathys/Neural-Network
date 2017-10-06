@@ -1,6 +1,7 @@
 package network.main;
 
 import java.io.FileWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,19 +10,19 @@ import java.io.FileWriter;
 
 
 public class Neuron {
-	private float neuron;
-	/* wait can i edit this at all*/
+	private BigDecimal neuron;
+	
 	private NeuralStatus status;
 	
 	private int numberOfConnectedNeurons;
-	private float learningRate;
+	private BigDecimal learningRate;
 	
-	private float[] weight;
-	private float[] weightDelta;
+	private BigDecimal[] weight;
+	private BigDecimal[] weightDelta;
 	
 	private Random r;
 	
-	public Neuron(float neuron, int numberOfConnectedNeurons, NeuralStatus status, float learningRate){
+	public Neuron(BigDecimal neuron, int numberOfConnectedNeurons, NeuralStatus status, BigDecimal learningRate){
 		this.neuron = neuron;
 		this.status = status;
 		this.learningRate = learningRate;
@@ -29,12 +30,12 @@ public class Neuron {
 		r = new Random();
 		
 		this.numberOfConnectedNeurons = numberOfConnectedNeurons;
-		weight = new float[numberOfConnectedNeurons];
-		weightDelta = new float[numberOfConnectedNeurons];
+		weight = new BigDecimal[numberOfConnectedNeurons];
+		weightDelta = new BigDecimal[numberOfConnectedNeurons];
 		
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
-				weight[i] = r.nextFloat() - .5f;
+				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
 			}
 		}
 		else{
@@ -43,19 +44,19 @@ public class Neuron {
 		}
 	}
 
-	public Neuron(int numberOfConnectedNeurons, NeuralStatus status, float learningRate){
+	public Neuron(int numberOfConnectedNeurons, NeuralStatus status, BigDecimal learningRate){
 		this.status = status;
 		this.learningRate = learningRate;
 		
 		r = new Random();
 		
 		this.numberOfConnectedNeurons = numberOfConnectedNeurons;
-		weight = new float[numberOfConnectedNeurons];
-		weightDelta = new float[numberOfConnectedNeurons];
+		weight = new BigDecimal[numberOfConnectedNeurons];
+		weightDelta = new BigDecimal[numberOfConnectedNeurons];
 		
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
-				weight[i] = r.nextFloat() - .5f;
+				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
 			}
 		}
 		else{
@@ -64,7 +65,7 @@ public class Neuron {
 		}
 	}
 	
-	public Neuron(float neuron, NeuralStatus status, float learningRate){
+	public Neuron(BigDecimal neuron, NeuralStatus status, BigDecimal learningRate){
 		this.neuron = neuron;
 		this.status = status;
 		this.learningRate = learningRate;
@@ -72,14 +73,14 @@ public class Neuron {
 		r = new Random();
 	}
 	
-	public Neuron(float neuron, NeuralStatus status){
+	public Neuron(BigDecimal neuron, NeuralStatus status){
 		this.neuron = neuron;
 		this.status = status;
 		
 		r = new Random();
 	}
 	
-	public Neuron(float neuron){
+	public Neuron(BigDecimal neuron){
 		this.neuron = neuron;
 		
 		r = new Random();
@@ -98,12 +99,12 @@ public class Neuron {
 	
 	public void initWeights(int numberOfConnectedNeurons){
 		this.numberOfConnectedNeurons = numberOfConnectedNeurons;
-		weight = new float[numberOfConnectedNeurons];
-		weightDelta = new float[numberOfConnectedNeurons];
+		weight = new BigDecimal[numberOfConnectedNeurons];
+		weightDelta = new BigDecimal[numberOfConnectedNeurons];
 		
 		if(status == NeuralStatus.Input || status == NeuralStatus.Hidden){
 			for(int i = 0; i < weight.length; i++){
-				weight[i] = (r.nextFloat() * 2) - 1f;
+				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
 			}
 		}
 		else{
@@ -112,9 +113,9 @@ public class Neuron {
 		}
 	}
 
-	public void initWeightDelta(float[] gamma){
+	public void initWeightDelta(BigDecimal[] gamma){
 		for(int i = 0; i < numberOfConnectedNeurons; i++){
-			weightDelta[i] = neuron * gamma[i];
+			weightDelta[i] = neuron.multiply(gamma[i]);
 		}
 	}
 
@@ -122,34 +123,35 @@ public class Neuron {
 		this.status = status;
 	}
 	
-	public void updateLearningRate(float learningRate){
+	public void updateLearningRate(BigDecimal learningRate){
 		this.learningRate = learningRate;
 	}
 	
 	public void updateWeights(){
 		for(int i = 0; i < weight.length; i++){
-			weight[i] -= weightDelta[i] * learningRate;
+			weight[i].subtract(weightDelta[i].multiply(learningRate));
 		}
 	}
 	
-	public void addFloatToNeuron(float update){
-		neuron += update;
+	public void addToNeuron(BigDecimal update){
+		neuron.toString();
+		neuron.add(update);
 	}
 	
 	public void tanHNeuron(){
-		neuron = (float) Math.tanh(neuron);
+		neuron = BigDecimal.valueOf(Math.tanh(neuron.doubleValue()));
 	}
 	
-	public float getNeuron(){
+	public BigDecimal getNeuron(){
 		return neuron;
 	}
 	
-	public void setNeuron(float neuron){
+	public void setNeuron(BigDecimal neuron){
 		this.neuron = neuron;
 	}
 	
-	public float FeedForward(int indexOfOutputNeuron){
-		return neuron * weight[indexOfOutputNeuron];
+	public BigDecimal FeedForward(int indexOfOutputNeuron){
+		return neuron.multiply(weight[indexOfOutputNeuron]);
 	}
 
 	public void mutate(float chance){
@@ -157,18 +159,18 @@ public class Neuron {
 		float num = (chance / 4) * 1000;
 		for(int i = 0; i < weight.length; i++){
 			if(rn <= num){
-				weight[i] *= -1;
+				weight[i].negate();
 			}
 			else if(rn <= num * 2){
-				weight[i] = r.nextFloat() - .5f;
+				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
 			}
 			else if(rn <= num * 3){
-				float factor = r.nextFloat() + 1f;
-				weight[i] *= factor;
+				BigDecimal factor = new BigDecimal(String.valueOf(r.nextFloat() + 1f));
+				weight[i].multiply(factor);
 			}
 			else if(rn <= num * 4){
-				float factor = r.nextFloat();
-				weight[i] *= factor;
+				BigDecimal factor = new BigDecimal(String.valueOf(r.nextFloat()));
+				weight[i].multiply(factor);
 			}
 		}
 	}
@@ -181,7 +183,7 @@ public class Neuron {
 		String filename = "Neuron" + number + ".csv";
 		ArrayList<String> objects = new ArrayList<String>();
 		for(int i = 0; i < weight.length; i++){
-			Float f = weight[i];
+			BigDecimal f = weight[i];
 			objects.add(f.toString());
 		}
 		
@@ -193,7 +195,7 @@ public class Neuron {
         	fileWriter.append(NEW_LINE_SEPARATOR);
         	  	
         	for (int i = 0; i < weight.length; i++) {
-        		Float f = weight[i];
+        		BigDecimal f = weight[i];
         		
         		fileWriter.append(String.valueOf(i));
         		fileWriter.append(COMMA_DELIMITER);
