@@ -88,7 +88,9 @@ public class Neuron {
 	
 	public Neuron(BigDecimal neuron){
 		this.neuron = neuron;
+		// you need to set the size of weight in here, as well as all the rest of the Constructors that you use. 
 		
+		weight = new BigDecimal[numberOfConnectedNeurons]; // maybe not the size, but a test case
 		r = new Random();
 	}
 	
