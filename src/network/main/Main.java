@@ -47,13 +47,13 @@ public class Main {
 		 * Testing 
 		 * f(x, y) = (x + 5^(1/2))/y
 		 **/
-
-        inputs[0] = new Neuron(BigDecimal.ONE);
+	
+        inputs[0] = new Neuron(BigDecimal.ONE); /// This line creates a new Neuron
         dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
-        inputs[0].CSVwriter(0);
+        inputs[0].CSVwriter(0); // This line uses CSVwriter to print to the new Neuron
         inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
         dinputs[1] = new Neuron(reduce(inputs[1].getNeuron()));
-        inputs[1].CSVwriter(1);
+        inputs[1].CSVwriter(1); // etc with the next
 		long startTime = System.nanoTime();
 		for(int i = 1; i <= numberOfIterations; i++){
 			inputs[0] = new Neuron(BigDecimal.ONE);
