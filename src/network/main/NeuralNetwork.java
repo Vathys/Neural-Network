@@ -68,7 +68,20 @@ public class NeuralNetwork {
 	public NeuronLayer getOutputLayer(){
 		return neuronLayer[neuronLayer.length - 1];
 	}
-
+	
+	/**
+	 * Getter Function
+	 * 	gets the error that the output of the particular input has given
+	 * 
+	 * @param expected
+	 * 	the expected values of the output
+	 * @return
+	 */
+	public BigDecimal[] getError(BigDecimal[] expected){
+		neuronLayer[neuronLayer.length - 2].calculateError(expected);
+		return neuronLayer[neuronLayer.length - 2].getError();
+	}
+		
 	/**
 	 * Initializing Function
 	 * 

@@ -145,9 +145,7 @@ public class NeuronLayer {
 	 * 	array of expected values for the inputs
 	 */
 	public void backPropInitial(BigDecimal[] expected){
-		for(int i = 0; i < numberOfOutputs; i++){
-			error[i] = output[i].getNeuron().subtract(expected[i]);
-		}
+		calculateError(expected);
 		for(int i = 0; i < numberOfOutputs; i++){
 			gamma[i] = error[i].multiply(tanHDer(output[i].getNeuron()));
 		}
@@ -176,6 +174,19 @@ public class NeuronLayer {
 			output[i].tanHNeuron();
 		}
 		return output;
+	}
+	
+	/**
+	 * Update Function
+	 * 	calculate the error from the expected values
+	 * 
+	 * @param expected
+	 * 	the expected values of the output
+	 */
+	public void calculateError(BigDecimal[] expected){
+		for(int i = 0; i < numberOfOutputs; i++){
+			error[i] = output[i].getNeuron().subtract(expected[i]);
+		}
 	}
 	
 	/**
