@@ -6,31 +6,43 @@ import java.math.BigDecimal;
 
 public class NeuronLayer {
 	
-	private int numberOfOutputs;
-	private int numberOfInputs;
-	
-	private NeuralStatus layerStatus;
-	private BigDecimal learningRate;
+	private BigDecimal[] error;
+	private BigDecimal[] gamma;
 	
 	private Neuron[] layerNeurons;
+	private NeuralStatus layerStatus;
+	
+	private BigDecimal learningRate;
+	private int numberOfLayerNeurons;
+	
+	private int numberOfOutputs;
 	private Neuron[] output;
 	
-	private BigDecimal[] gamma;
-	private BigDecimal[] error;
-	
-	public NeuronLayer(int numberOfInputs, int numberOfOutputs, NeuralStatus layerStatus, BigDecimal learningRate){
+	/**
+	 * Constructor 
+	 *  
+	 * @param numberOfLayerNeurons
+	 * 	the number of neurons in current layer
+	 * @param numberOfOutputs
+	 * 	the number of neuron
+	 * @param layerStatus
+	 * 	the status (eg. input, hidden, output)
+	 * @param learningRate
+	 * 	the learning rate
+	 */
+	public NeuronLayer(int numberOfLayerNeurons, int numberOfOutputs, NeuralStatus layerStatus, BigDecimal learningRate){
 		this.numberOfOutputs = numberOfOutputs;
-		this.numberOfInputs = numberOfInputs;
+		this.numberOfLayerNeurons = numberOfLayerNeurons;
 		this.layerStatus = layerStatus;
 		this.learningRate = learningRate;
 		
-		layerNeurons = new Neuron[numberOfInputs];
+		layerNeurons = new Neuron[numberOfLayerNeurons];
 		output = new Neuron[numberOfOutputs];
 		
 		gamma = new BigDecimal[numberOfOutputs];
 		error = new BigDecimal[numberOfOutputs];
 		
-		for(int i = 0; i < numberOfInputs; i++){
+		for(int i = 0; i < numberOfLayerNeurons; i++){
 			layerNeurons[i] = new Neuron(numberOfOutputs, layerStatus, learningRate);
 		}
 		for(int i = 0; i < numberOfOutputs; i++){
@@ -39,6 +51,16 @@ public class NeuronLayer {
 		}
 	}
 	
+	/**
+	 * Constructor 
+	 * 
+	 * @param numberOfOutputs
+	 * 	the number of neuron
+	 * @param layerStatus
+	 * 	the status (eg. input, hidden, output)
+	 * @param learningRate
+	 * 	the learning rate
+	 */
 	public NeuronLayer(int numberOfOutputs, NeuralStatus layerStatus, BigDecimal learningRate){
 		this.numberOfOutputs = numberOfOutputs;
 		this.layerStatus = layerStatus;
@@ -54,6 +76,13 @@ public class NeuronLayer {
 		}
 	}
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param neurons
+	 * 	creates a neuron layer from an array of neurons by copying each neuron into layerNeuron
+	 * @throws IOException
+	 */
 	public NeuronLayer(Neuron[] neurons) throws IOException{
 		layerNeurons = new Neuron[neurons.length];
 		for(int i = 0; i < neurons.length; i++){
@@ -62,6 +91,12 @@ public class NeuronLayer {
 		}
 	}
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param neuronLayer
+	 * 	existing neuronLayer to copy
+	 */
 	public NeuronLayer(NeuronLayer neuronLayer){
 		this.numberOfOutputs = neuronLayer.numberOfOutputs;
 		this.layerNeurons = neuronLayer.layerNeurons;
@@ -72,76 +107,21 @@ public class NeuronLayer {
 		this.learningRate = neuronLayer.learningRate;
 	}
 
-	public Neuron[] getLayerNeurons(){
-		return layerNeurons;
-	}
-	
-	public Neuron[] getOutput(){
-		return output;
-	}
-
-	public BigDecimal[] getGamma(){
-		return gamma;
-	}
-	
-	public BigDecimal[] getError(){
-		return error;
-	}
-	
-	public NeuralStatus getStatus(){
-		return layerStatus;
-	}
-	
-	public Neuron[] FeedForward(Neuron[] inputs){
-		for(int i = 0; i < numberOfInputs; i++){
-			layerNeurons[i].setNeuron(inputs[i].getNeuron());
-		}
-		for(int i = 0; i < output.length; i++){
-			output[i].setNeuron(BigDecimal.ZERO);
-			for(int j = 0; j < layerNeurons.length; j++){
-				output[i].addToNeuron(layerNeurons[j].FeedForward(i));
-			}
-			output[i].tanHNeuron();
-			//System.out.println(output[i]);
-		}
-		return output;
-	}
-	
-	public void mutate(float chance){
-		for(int i = 0; i < layerNeurons.length; i++){
-			layerNeurons[i].mutate(chance);
-		}
-	}
-	
-	public BigDecimal tanHDer(BigDecimal input){
-		return input.multiply(input).subtract(BigDecimal.ONE);
-	}
-	
-	public void backPropInitial(BigDecimal[] expected){
-		for(int i = 0; i < numberOfOutputs; i++){
-			error[i] = output[i].getNeuron().subtract(expected[i]);
-			//System.out.println("Error " + i + " : " + error[i].toString());
-		}
-		for(int i = 0; i < numberOfOutputs; i++){
-			gamma[i] = error[i].multiply(tanHDer(output[i].getNeuron()));
-			//System.out.println("Gamma " + i + " : " + gamma[i].toString());
-		}
-		for(int i = 0; i < layerNeurons.length; i++){
-			//System.out.println("Neuron Before " + i + " : " + layerNeurons[i]);
-			layerNeurons[i].initWeightDelta(gamma);
-			layerNeurons[i].updateWeights();
-			//System.out.println("Neuron After " + i + " : " + layerNeurons[i]);
-		}
-	}
-	
+	/**
+	 * Back Propagation
+	 * 	Back Propagation for every other layer
+	 * 
+	 * 	Back Propagation steps
+	 * 		1. calculate gamma for weights
+	 * 			gamma of neuron = tanHDer(summation (gamma of each weight of connected neuron * connected neuron))
+	 * 		2. initialize WeightDelta array in layerNeuron by passing gamma
+	 * @param forwardLayer
+	 * 	neuronLayer that comes after this layer
+	 */
 	public void backPropHidden(NeuronLayer forwardLayer){
 		for(int i = 0; i < forwardLayer.layerNeurons.length; i++){
 			for(int j = 0; j < forwardLayer.gamma.length; j++){
-				//System.out.println("Before Gamma " + i + " : " + gamma[i]);
 				gamma[i] = gamma[i].add(forwardLayer.gamma[j].multiply(forwardLayer.layerNeurons[i].getNeuron()));
-				//System.out.println(forwardLayer.gamma[j].multiply(forwardLayer.layerNeurons[i].getNeuron()));
-				//System.out.println("After Gamma " + i + " : " + gamma[i]);
-				//System.out.println(forwardLayer.gamma[j].multiply(forwardLayer.layerNeurons[i].getNeuron()));
 			}
 			gamma[i] = tanHDer(gamma[i]);
 		}
@@ -151,6 +131,127 @@ public class NeuronLayer {
 		}
 	}
 	
+	/**
+	 * Initial Back Propagation
+	 * 	Back Propagation for the last hidden layer
+	 * 		
+	 * 	Back Propagation steps
+	 * 		1. calculate error array
+	 * 		2. calculate gamma array
+	 * 			error * TanHDer(output)
+	 * 		3. initialize weightDelta in layerNeuron by passing gamma
+	 * 
+	 * @param expected
+	 * 	array of expected values for the inputs
+	 */
+	public void backPropInitial(BigDecimal[] expected){
+		for(int i = 0; i < numberOfOutputs; i++){
+			error[i] = output[i].getNeuron().subtract(expected[i]);
+		}
+		for(int i = 0; i < numberOfOutputs; i++){
+			gamma[i] = error[i].multiply(tanHDer(output[i].getNeuron()));
+		}
+		for(int i = 0; i < layerNeurons.length; i++){
+			layerNeurons[i].initWeightDelta(gamma);
+			layerNeurons[i].updateWeights();
+		}
+	}
+
+	/**
+	 * FeedForward
+	 * @param inputs
+	 * 	neurons to be put into layerNeurons
+	 * @return output array
+	 * 	each element in the output array is the summation of all the neurons in the layerNeuron * the corresponding weight
+	 */
+	public Neuron[] FeedForward(Neuron[] inputs){
+		for(int i = 0; i < numberOfLayerNeurons; i++){
+			layerNeurons[i].setNeuron(inputs[i].getNeuron());
+		}
+		for(int i = 0; i < output.length; i++){
+			output[i].setNeuron(BigDecimal.ZERO);
+			for(int j = 0; j < layerNeurons.length; j++){
+				output[i].addToNeuron(layerNeurons[j].FeedForward(i));
+			}
+			output[i].tanHNeuron();
+		}
+		return output;
+	}
+	
+	/**
+	 * Getter Function
+	 * 
+	 * @return error
+	 */
+	public BigDecimal[] getError(){
+		return error;
+	}
+	
+	/**
+	 * Getter Function
+	 * 
+	 * @return gamma
+	 */
+	public BigDecimal[] getGamma(){
+		return gamma;
+	}
+	
+	/**
+	 * Getter Function
+	 * 
+	 * @return layerNeuron
+	 */
+	public Neuron[] getLayerNeurons(){
+		return layerNeurons;
+	}
+	
+	/**
+	 * Getter Function
+	 * 
+	 * @return output
+	 */
+	public Neuron[] getOutput(){
+		return output;
+	}
+	
+	/**
+	 * Getter Function
+	 * 
+	 * @return layerStatus
+	 */
+	public NeuralStatus getStatus(){
+		return layerStatus;
+	}
+	
+	/**
+	 * Mutate
+	 * 
+	 * activates the mutate function for each of the neurons in the neuronLayer
+	 * @param chance
+	 */
+	public void mutate(float chance){
+		for(int i = 0; i < layerNeurons.length; i++){
+			layerNeurons[i].mutate(chance);
+		}
+	}
+	
+	/**
+	 * Derivative of Activation Function
+	 * 
+	 * d(tanh(x)) / dx
+	 * 
+	 * @param input
+	 * @return f'(input)
+	 * 	where f(x) = tanh(x)
+	 */
+	public BigDecimal tanHDer(BigDecimal input){
+		return input.multiply(input).subtract(BigDecimal.ONE);
+	}
+	
+	/* 
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		String toString = "Neurons: [";
 		for(int i = 0; i < layerNeurons.length - 1; i++){

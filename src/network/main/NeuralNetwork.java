@@ -9,6 +9,14 @@ public class NeuralNetwork {
 	private NeuronLayer[] neuronLayer;
 	private Random r;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param layers	
+	 *  array containing the number of layers(length of array) and the size of each layer (nth element)
+	 * @param learningRate
+	 * 	the learning rate
+	 */
 	public NeuralNetwork(int[] layers, BigDecimal learningRate){
 		this.layers =  new int[layers.length];
 		this.learningRate = learningRate;
@@ -20,6 +28,52 @@ public class NeuralNetwork {
 		initLayer();
 	}
 	
+	/**
+	 * Back Prop
+	 * initial Back Propagation function is called for the second to last layer because it contains both the output and the previous layer
+	 * normal Back Propagation is called for all the other layers
+	 * 
+	 * @param expected
+	 * 	expected output values for input
+	 */
+	public void backProp(BigDecimal[] expected){
+		neuronLayer[neuronLayer.length - 2].backPropInitial(expected);
+		for(int i = neuronLayer.length - 3; i >= 0; i--){
+			neuronLayer[i].backPropHidden(neuronLayer[i + 1]);
+		}
+	}
+
+	/**
+	 * FeedForward
+	 * 
+	 * @param inputs
+	 * 	input of neurons
+	 * @return the output neuronLayer
+	 */
+	public NeuronLayer FeedForward(Neuron[] inputs){
+		neuronLayer[0].FeedForward(inputs);
+		
+		for(int i = 1; i < neuronLayer.length; i++){
+			neuronLayer[i].FeedForward(neuronLayer[i - 1].getOutput());
+		}
+		
+		return neuronLayer[neuronLayer.length - 1];
+	}
+	
+	/**
+	 * Getter Function
+	 * 
+	 * @return last Neuron Layer
+	 */
+	public NeuronLayer getOutputLayer(){
+		return neuronLayer[neuronLayer.length - 1];
+	}
+
+	/**
+	 * Initializing Function
+	 * 
+	 * initializes Neuron Layers from information give in constructor
+	 */
 	private void initLayer(){
 		neuronLayer = new NeuronLayer[layers.length];
 		neuronLayer[0] = new NeuronLayer(layers[0], layers[1], NeuralStatus.Input, learningRate);
@@ -30,36 +84,15 @@ public class NeuralNetwork {
 		}
 	}
 
-	public NeuronLayer getOutputLayer(){
-		return neuronLayer[neuronLayer.length - 1];
-	}
-	
-	public NeuronLayer FeedForward(Neuron[] inputs){
-		neuronLayer[0].FeedForward(inputs);
-		
-		for(int i = 1; i < neuronLayer.length; i++){
-			/*Neuron[] val = neuronLayer[i - 1].getOutput();
-			for(int j = 0; j < val.length; j++){
-				System.out.print(val[j] + " | ");
-			}
-			System.out.println("\n");*/
-			neuronLayer[i].FeedForward(neuronLayer[i - 1].getOutput());
-		}
-		
-		return neuronLayer[neuronLayer.length - 1];
-	}
-
+	/**
+	 * Mutate
+	 * calls the mutate function for each neuronLayer
+	 * 
+	 * @param chance
+	 */
 	public void mutate(float chance){
 		for(int i = 0; i < neuronLayer.length - 1; i++){
 			neuronLayer[i].mutate(chance);
-		}
-	}
-
-	public void backProp(BigDecimal[] expected){
-		neuronLayer[neuronLayer.length - 2].backPropInitial(expected);
-		for(int i = neuronLayer.length - 3; i >= 0; i--){
-			//System.out.println("--------------------------------------------------------------------------------------------");
-			neuronLayer[i].backPropHidden(neuronLayer[i + 1]);
 		}
 	}
 }
