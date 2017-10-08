@@ -49,8 +49,7 @@ public class Main {
 		 * Testing 
 		 * f(x, y) = (x + 5^(1/2))/y
 		 * 
-		 **/
-        inputs[0] = new Neuron(BigDecimal.ONE);
+		 **/        inputs[0] = new Neuron(BigDecimal.ONE);
         dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
         //inputs[0].CSVwriter(0);
         inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
@@ -58,6 +57,7 @@ public class Main {
         expected[0] = testFunc(inputs[0].getNeuron(), inputs[1].getNeuron());
 		dexpected[0] = reduce(expected[0]);
        // inputs[1].CSVwriter(1);
+
 		long startTime = System.nanoTime();
 		
 		double averageError = 1;
