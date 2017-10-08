@@ -77,9 +77,8 @@ public class NeuralNetwork {
 	 * 	the expected values of the output
 	 * @return
 	 */
-	public BigDecimal[] getError(BigDecimal[] expected){
-		neuronLayer[neuronLayer.length - 2].calculateError(expected);
-		return neuronLayer[neuronLayer.length - 2].getError();
+	public BigDecimal getError(BigDecimal[] expected){
+		return neuronLayer[neuronLayer.length - 2].calculateError(expected);
 	}
 		
 	/**

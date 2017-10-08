@@ -38,18 +38,19 @@ public class Main {
 		Neuron[] dinputs = new Neuron[layers[0]];
 		BigDecimal[] expected = new BigDecimal[layers[layers.length - 1]];
 		BigDecimal[] dexpected = new BigDecimal[layers[layers.length - 1]];
-		double learningRate = .7;
+		double learningRate = .8;
 		Random r = new Random();
 		NeuralNetwork n = new NeuralNetwork(layers, BigDecimal.valueOf(learningRate));
 		NeuronLayer output;
-		int numberOfIterations = 20;
-		double stopValue = .3;
+		int numberOfIterations = 0;
+		double stopValue = .35;
 
 		/*
 		 * Testing 
 		 * f(x, y) = (x + 5^(1/2))/y
 		 * 
-		 **/        inputs[0] = new Neuron(BigDecimal.ONE);
+		 **/        
+		inputs[0] = new Neuron(BigDecimal.ONE);
         dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
         //inputs[0].CSVwriter(0);
         inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
@@ -64,19 +65,12 @@ public class Main {
 		while(Math.abs(averageError) > stopValue){
 			n.mutate(1f);
 			n.FeedForward(dinputs);
-			BigDecimal[] error = n.getError(dexpected);
-			for(int i = 0; i < error.length; i++){
-				error[i] = n.getError(dexpected)[i];
-			}
-			BigDecimal sum = BigDecimal.ZERO;
-			for(int i = 0; i < error.length; i++){
-				sum = sum.add(error[i]);
-			}
-			sum = sum.divide(BigDecimal.valueOf(error.length), RoundingMode.HALF_EVEN);
-			averageError = sum.doubleValue();
+			BigDecimal error = n.getError(dexpected);
+			averageError = error.doubleValue();
 			System.out.println(averageError);
 		}
-		for(int i = 0; i < numberOfIterations; i++){
+		numberOfIterations = 10;
+		for(int i = 1; i <= numberOfIterations; i++){
 			System.out.println("Trial: " + i);
 			
 		    n.FeedForward(dinputs);
@@ -86,10 +80,8 @@ public class Main {
 		    
 			System.out.println((output.getLayerNeurons()[0].getNeuron()) + " : "+ dexpected[0]);
 		}
-		
-		
 		long endTime = System.nanoTime();
-		System.out.println(endTime - startTime);
+		System.out.println((endTime - startTime) / 1000000000);
 	}
 
 	/**

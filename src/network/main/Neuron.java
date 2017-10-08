@@ -195,11 +195,7 @@ public class Neuron {
 	 */
 	public void initWeightDelta(BigDecimal[] gamma) {
 		for (int i = 0; i < numberOfConnectedNeurons; i++) {
-			// System.out.println("Before Delta " + i + " : " + weightDelta[i]);
-			// System.out.println("Gamma " + i + " : " + gamma[i]);
-			// System.out.println("Neuron " + i + " : " + neuron);
 			weightDelta[i] = neuron.multiply(gamma[i]);
-			// System.out.println("Times Gamma " + i + " : " + weightDelta[i]);
 		}
 	}
 
@@ -281,7 +277,7 @@ public class Neuron {
 	 */
 	public void updateWeights() {
 		for (int i = 0; i < weight.length; i++) {
-			weight[i] = weight[i].subtract(weightDelta[i].multiply(learningRate));
+			weight[i] = weight[i].add(weightDelta[i].multiply(learningRate));
 		}
 	}
 	
