@@ -15,6 +15,9 @@ public class NeuronLayer {
 	private BigDecimal learningRate;
 	private int numberOfLayerNeurons;
 	
+	
+	//The output array should be deleted to reduce memory usage. 
+	//The array will be accessed directly from the layer after it. 
 	private int numberOfOutputs;
 	private Neuron[] output;
 	
