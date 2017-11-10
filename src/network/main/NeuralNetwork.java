@@ -1,13 +1,11 @@
 package network.main;
 
 import java.math.BigDecimal;
-import java.util.Random;
 
 public class NeuralNetwork {
 	private int[] layers;
 	private BigDecimal learningRate;
 	private NeuronLayer[] neuronLayer;
-	private Random r;
 	
 	/**
 	 * Constructor
@@ -23,8 +21,6 @@ public class NeuralNetwork {
 		for(int i = 0; i < layers.length; i++){
 			this.layers[i] = layers[i];
 		}
-		
-		r = new Random();
 		initLayer();
 	}
 	
@@ -52,9 +48,11 @@ public class NeuralNetwork {
 	 */
 	public NeuronLayer FeedForward(Neuron[] inputs){
 		neuronLayer[0].FeedForward(inputs);
+		System.out.println(neuronLayer[0]);
 		
 		for(int i = 1; i < neuronLayer.length; i++){
 			neuronLayer[i].FeedForward(neuronLayer[i - 1].getOutput());
+			System.out.println(neuronLayer[i]);
 		}
 		
 		return neuronLayer[neuronLayer.length - 1];

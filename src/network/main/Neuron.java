@@ -7,10 +7,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 
 public class Neuron {
@@ -188,7 +185,8 @@ public class Neuron {
 	}
 
 	/**
-	 * Initializing Function Initializes the weightDelta array by calculating
+	 * Initializing Function 
+	 * Initializes the weightDelta array by calculating
 	 * the weightDetla from an array of gamma.
 	 * 
 	 * @param gamma
@@ -201,7 +199,8 @@ public class Neuron {
 	}
 
 	/**
-	 * Mutates mutates all the weights on the basis of the given chance param
+	 * Mutates 
+	 * mutates all the weights on the basis of the given chance param
 	 * 
 	 * Types of Mutations 1. weight * -1 2. new weight 3. increase by a percent
 	 * 4. decrease by a percent
@@ -228,7 +227,8 @@ public class Neuron {
 	}
 
 	/**
-	 * Setter Function Set learning rate
+	 * Setter Function 
+	 * Set learning rate
 	 * 
 	 * @param learningRate
 	 */
@@ -255,13 +255,14 @@ public class Neuron {
 	}
 
 	/**
-	 * Activation Function applies the activation function of TanH on the itself
+	 * Activation Function 
+	 * applies the activation function of TanH on the itself
 	 */
 	public void tanHNeuron() {
 		neuron = BigDecimal.valueOf(Math.tanh(neuron.doubleValue()));
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see java.lang.Object#toString()
@@ -272,7 +273,8 @@ public class Neuron {
 	}
 
 	/**
-	 * Update Function updates weights by using weightDelta and learning rate
+	 * Update Function 
+	 * updates weights by using weightDelta and learning rate
 	 * 
 	 * Weight sub(i) = weight sub(i) - (weightDelta sub(i) * learningRate)
 	 */

@@ -32,23 +32,23 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {
-		int[] layers = {2, 2, 1};
+		int[] layers = {2, 3, 1};
 		Neuron[] inputs = new Neuron[layers[0]];
 		Neuron[] dinputs = new Neuron[layers[0]];
 		BigDecimal[] expected = new BigDecimal[layers[layers.length - 1]];
 		BigDecimal[] dexpected = new BigDecimal[layers[layers.length - 1]];
 		double learningRate = .3;
-		Random r = new Random();
 		NeuralNetwork n = new NeuralNetwork(layers, BigDecimal.valueOf(learningRate));
 		NeuronLayer output;
-		int numberOfIterations = 0;
+		int numberOfIterations = 5;
 		double stopValue = .35;
 
 		/*
 		 * Testing 
 		 * f(x, y) = (x + 5^(1/2))/y
 		 * 
-		 **/        
+		 **/
+		
 		inputs[0] = new Neuron(BigDecimal.ONE);
         dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
         //inputs[0].CSVwriter(0);
@@ -61,14 +61,15 @@ public class Main {
 		long startTime = System.nanoTime();
 		
 		double averageError = 1;
-		while(Math.abs(averageError) > stopValue){
+		
+		/*while(Math.abs(averageError) > stopValue){
 			n.mutate(1f);
 			n.FeedForward(dinputs);
 			BigDecimal error = n.getError(dexpected);
 			averageError = error.doubleValue();
 			System.out.println(averageError);
-		}
-		numberOfIterations = 10;
+		}*/
+		
 		for(int i = 1; i <= numberOfIterations; i++){
 			System.out.println("Trial: " + i);
 			
