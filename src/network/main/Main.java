@@ -37,7 +37,7 @@ public class Main {
 		Neuron[] dinputs = new Neuron[layers[0]];
 		BigDecimal[] expected = new BigDecimal[layers[layers.length - 1]];
 		BigDecimal[] dexpected = new BigDecimal[layers[layers.length - 1]];
-		double learningRate = .3;
+		double learningRate = .2;
 		Random r = new Random();
 		NeuralNetwork n = new NeuralNetwork(layers, BigDecimal.valueOf(learningRate));
 		NeuronLayer output;
@@ -60,27 +60,33 @@ public class Main {
 
 		long startTime = System.nanoTime();
 		
-		double averageError = 1;
-		while(Math.abs(averageError) > stopValue){
-			n.mutate(1f);
-			n.FeedForward(dinputs);
-			BigDecimal error = n.getError(dexpected);
-			averageError = error.doubleValue();
-			System.out.println(averageError);
-		}
-		numberOfIterations = 10;
-		for(int i = 1; i <= numberOfIterations; i++){
-			System.out.println("Trial: " + i);
-			
-		    n.FeedForward(dinputs);
+		int j = 0;
+		while(true){
+			n = new NeuralNetwork(layers, BigDecimal.valueOf(learningRate));
+			double averageError = 1;
+			while(Math.abs(averageError) > stopValue){
+				n.mutate(1f);
+				n.FeedForward(dinputs);
+				BigDecimal error = n.getError(dexpected);
+				averageError = error.doubleValue();
+				//System.out.println(averageError);
+			}
+			numberOfIterations = 50;
+			for(int i = 1; i <= numberOfIterations; i++){
+				
+			    n.FeedForward(dinputs);
+			   
+				n.backProp(dexpected);
+			    
+			}
+			System.out.println("Trial: " + j);
 			output = new NeuronLayer(n.getOutputLayer());
-		   
-			n.backProp(dexpected);
-		    
 			System.out.println((output.getLayerNeurons()[0].getNeuron()) + " : "+ dexpected[0]);
+			long endTime = System.nanoTime();
+			System.out.println((endTime - startTime) / 1000000000);
+			j++;
+			Thread.sleep(300);
 		}
-		long endTime = System.nanoTime();
-		System.out.println((endTime - startTime) / 1000000000);
 	}
 
 	/**
