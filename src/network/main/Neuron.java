@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -159,7 +160,7 @@ public class Neuron {
 	 * @param addition
 	 */
 	public void addToNeuron(BigDecimal addition) {
-		neuron = neuron.add(addition);
+		neuron = neuron.add(addition, MathContext.DECIMAL64);
 	}
 
 	/**
@@ -173,7 +174,7 @@ public class Neuron {
 	 */
 	public BigDecimal FeedForward(int indexOfOutputNeuron) {
 		// System.out.println(weight[indexOfOutputNeuron]);
-		this.neuron = neuron.multiply(weight[indexOfOutputNeuron]);
+		this.neuron = neuron.multiply(weight[indexOfOutputNeuron], MathContext.DECIMAL64);
 		return this.neuron;
 	}
 
@@ -195,7 +196,7 @@ public class Neuron {
 	 */
 	public void initWeightDelta(BigDecimal[] gamma) {
 		for (int i = 0; i < numberOfConnectedNeurons; i++) {
-			weightDelta[i] = neuron.multiply(gamma[i]);
+			weightDelta[i] = neuron.multiply(gamma[i], MathContext.DECIMAL64);
 		}
 	}
 
@@ -218,10 +219,10 @@ public class Neuron {
 				weight[i] = new BigDecimal(String.valueOf(r.nextFloat() - .5f));
 			} else if (rn <= num * 3) {
 				BigDecimal factor = new BigDecimal(String.valueOf(r.nextFloat() + 1f));
-				weight[i].multiply(factor);
+				weight[i].multiply(factor, MathContext.DECIMAL64);
 			} else if (rn <= num * 4) {
 				BigDecimal factor = new BigDecimal(String.valueOf(r.nextFloat()));
-				weight[i].multiply(factor);
+				weight[i].multiply(factor, MathContext.DECIMAL64);
 			}
 		}
 	}
@@ -277,7 +278,7 @@ public class Neuron {
 	 */
 	public void updateWeights() {
 		for (int i = 0; i < weight.length; i++) {
-			weight[i] = weight[i].add(weightDelta[i].multiply(learningRate));
+			weight[i] = weight[i].add(weightDelta[i].multiply(learningRate), MathContext.DECIMAL64);
 		}
 	}
 	

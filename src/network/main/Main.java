@@ -3,7 +3,6 @@ package network.main;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Random;
 
 public class Main {
@@ -38,7 +37,7 @@ public class Main {
 		Neuron[] dinputs = new Neuron[layers[0]];
 		BigDecimal[] expected = new BigDecimal[layers[layers.length - 1]];
 		BigDecimal[] dexpected = new BigDecimal[layers[layers.length - 1]];
-		double learningRate = .8;
+		double learningRate = .3;
 		Random r = new Random();
 		NeuralNetwork n = new NeuralNetwork(layers, BigDecimal.valueOf(learningRate));
 		NeuronLayer output;
