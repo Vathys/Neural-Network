@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Random;
 
 public class Main {
-	
+	// http://credit-card-generator.2-ee.com/search_fake+mastercard+number+list+with+cvv.htm#
 	public static BigDecimal testFunc(BigDecimal input1, BigDecimal input2){
 		BigDecimal result = BigDecimal.ONE;
 		
