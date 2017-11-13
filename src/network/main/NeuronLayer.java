@@ -6,7 +6,7 @@ import java.math.MathContext;
 
 public class NeuronLayer {
 	
-	private BigDecimal[] error;
+	private BigDecimal[] errorDer;
 	private BigDecimal[] gamma;
 	
 	private Neuron[] layerNeurons;
@@ -40,7 +40,7 @@ public class NeuronLayer {
 		output = new Neuron[numberOfOutputs];
 		
 		gamma = new BigDecimal[numberOfOutputs];
-		error = new BigDecimal[numberOfOutputs];
+		errorDer = new BigDecimal[numberOfOutputs];
 		
 		for(int i = 0; i < numberOfLayerNeurons; i++){
 			layerNeurons[i] = new Neuron(numberOfOutputs, layerStatus, learningRate);
@@ -69,7 +69,7 @@ public class NeuronLayer {
 		output = new Neuron[numberOfOutputs];
 		
 		gamma = new BigDecimal[numberOfOutputs];
-		error = new BigDecimal[numberOfOutputs];
+		errorDer = new BigDecimal[numberOfOutputs];
 		
 		for(int i = 0; i < numberOfOutputs; i++){
 			output[i] = new Neuron(0, NeuralStatus.Unknown, learningRate);
@@ -103,7 +103,7 @@ public class NeuronLayer {
 		this.output = neuronLayer.output;
 		this.layerStatus = neuronLayer.layerStatus;
 		this.gamma = neuronLayer.gamma;
-		this.error = neuronLayer.error;
+		this.errorDer = neuronLayer.errorDer;
 		this.learningRate = neuronLayer.learningRate;
 	}
 
@@ -146,10 +146,10 @@ public class NeuronLayer {
 	 */
 	public void backPropInitial(BigDecimal[] expected){
 		for(int i = 0; i < numberOfOutputs; i++){
-			error[i] = output[i].getNeuron().subtract(expected[i], MathContext.DECIMAL64);		
+			errorDer[i] = output[i].getNeuron().subtract(expected[i], MathContext.DECIMAL64);		
 		}
 		for(int i = 0; i < numberOfOutputs; i++){
-			gamma[i] = error[i].multiply(tanHDer(output[i].getNeuron()), MathContext.DECIMAL64);
+			gamma[i] = errorDer[i].multiply(tanHDer(output[i].getNeuron()), MathContext.DECIMAL64);
 		}
 		for(int i = 0; i < layerNeurons.length; i++){
 			layerNeurons[i].initWeightDelta(gamma);
@@ -188,8 +188,8 @@ public class NeuronLayer {
 	public BigDecimal calculateError(BigDecimal[] expected){
 		BigDecimal err = new BigDecimal(0);
 		for(int i = 0; i < numberOfOutputs; i++){
-			error[i] = output[i].getNeuron().subtract(expected[i], MathContext.DECIMAL64);
-			err = err.add(BigDecimal.valueOf(Math.pow(error[i].doubleValue(), 2)), MathContext.DECIMAL64);
+			errorDer[i] = output[i].getNeuron().subtract(expected[i], MathContext.DECIMAL64);
+			err = err.add(BigDecimal.valueOf(Math.pow(errorDer[i].doubleValue(), 2)), MathContext.DECIMAL64);
 		}
 		err = BigDecimal.valueOf(Math.sqrt(err.doubleValue()));
 		return err;
@@ -201,7 +201,7 @@ public class NeuronLayer {
 	 * @return error
 	 */
 	public BigDecimal[] getError(){
-		return error;
+		return errorDer;
 	}
 	
 	/**

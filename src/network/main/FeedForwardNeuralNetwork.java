@@ -2,7 +2,7 @@ package network.main;
 
 import java.math.BigDecimal;
 
-public class NeuralNetwork {
+public class FeedForwardNeuralNetwork {
 	private int[] layers;
 	private BigDecimal learningRate;
 	private NeuronLayer[] neuronLayer;
@@ -15,7 +15,7 @@ public class NeuralNetwork {
 	 * @param learningRate
 	 * 	the learning rate
 	 */
-	public NeuralNetwork(int[] layers, BigDecimal learningRate){
+	public FeedForwardNeuralNetwork(int[] layers, BigDecimal learningRate){
 		this.layers =  new int[layers.length];
 		this.learningRate = learningRate;
 		for(int i = 0; i < layers.length; i++){
@@ -48,13 +48,11 @@ public class NeuralNetwork {
 	 */
 	public NeuronLayer FeedForward(Neuron[] inputs){
 		neuronLayer[0].FeedForward(inputs);
-		System.out.println(neuronLayer[0]);
 		
 		for(int i = 1; i < neuronLayer.length; i++){
 			neuronLayer[i].FeedForward(neuronLayer[i - 1].getOutput());
-			System.out.println(neuronLayer[i]);
 		}
-		
+
 		return neuronLayer[neuronLayer.length - 1];
 	}
 	
