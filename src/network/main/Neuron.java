@@ -170,9 +170,8 @@ public class Neuron {
 	 * @return neuron * weight[indexOfOutputNeuron]
 	 */
 	public BigDecimal FeedForward(int indexOfOutputNeuron) {
-		// System.out.println(weight[indexOfOutputNeuron]);
-		this.neuron = neuron.multiply(weight[indexOfOutputNeuron], MathContext.DECIMAL64);
-		return this.neuron;
+		//System.out.println(weight[indexOfOutputNeuron]);
+		return neuron.multiply(weight[indexOfOutputNeuron], MathContext.DECIMAL64);
 	}
 
 	/**
@@ -194,7 +193,9 @@ public class Neuron {
 	 */
 	public void initWeightDelta(BigDecimal[] gamma) {
 		for (int i = 0; i < numberOfConnectedNeurons; i++) {
+			//System.out.println("Neuron : " + neuron);
 			weightDelta[i] = neuron.multiply(gamma[i], MathContext.DECIMAL64);
+			//System.out.println("weightDelta : " + weightDelta[i]);
 		}
 	}
 
@@ -281,6 +282,7 @@ public class Neuron {
 	public void updateWeights() {
 		for (int i = 0; i < weight.length; i++) {
 			weight[i] = weight[i].subtract(weightDelta[i].multiply(learningRate), MathContext.DECIMAL64);
+			//System.out.println("weight : " + weight[i]);
 		}
 	}
 	

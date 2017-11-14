@@ -146,10 +146,12 @@ public class NeuronLayer {
 	 */
 	public void backPropInitial(BigDecimal[] expected){
 		for(int i = 0; i < numberOfOutputs; i++){
-			errorDer[i] = output[i].getNeuron().subtract(expected[i], MathContext.DECIMAL64);		
+			errorDer[i] = output[i].getNeuron().subtract(expected[i], MathContext.DECIMAL64);
+			//System.out.println("ErrorDer : " + errorDer[i]);
 		}
 		for(int i = 0; i < numberOfOutputs; i++){
 			gamma[i] = errorDer[i].multiply(tanHDer(output[i].getNeuron()), MathContext.DECIMAL64);
+			//System.out.println("Gamma : " + gamma[i]);
 		}
 		for(int i = 0; i < layerNeurons.length; i++){
 			layerNeurons[i].initWeightDelta(gamma);
