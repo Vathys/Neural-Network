@@ -41,7 +41,7 @@ public class Main {
 		double learningRate = .05;
 		FeedForwardNeuralNetwork n = new FeedForwardNeuralNetwork(layers, BigDecimal.valueOf(learningRate));
 		NeuronLayer output;
-		int numberOfIterations = 200;
+		int numberOfIterations = 1000;
 		double stopValue = .35;
 
 		/*
@@ -77,7 +77,7 @@ public class Main {
 			    n.FeedForward(dinputs);
 			   
 				n.backProp(dexpected);
-			    
+				
 			}
 			System.out.println("Trial: " + j);
 			

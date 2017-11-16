@@ -281,7 +281,7 @@ public class Neuron {
 	 */
 	public void updateWeights() {
 		for (int i = 0; i < weight.length; i++) {
-			weight[i] = weight[i].subtract(weightDelta[i].multiply(learningRate), MathContext.DECIMAL64);
+			weight[i] = weight[i].add(weightDelta[i].multiply(learningRate), MathContext.DECIMAL64);
 			//System.out.println("weight : " + weight[i]);
 		}
 	}
