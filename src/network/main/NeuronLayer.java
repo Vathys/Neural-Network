@@ -1,8 +1,12 @@
 package network.main;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
+
+import CSVWorker.CSVWriter;
 
 public class NeuronLayer {
 	
@@ -87,7 +91,6 @@ public class NeuronLayer {
 		layerNeurons = new Neuron[neurons.length];
 		for(int i = 0; i < neurons.length; i++){
 			layerNeurons[i] = new Neuron(neurons[i]);
-			layerNeurons[i].CSVwriter(i);
 		}
 	}
 	
@@ -278,5 +281,38 @@ public class NeuronLayer {
 		}
 		toString += layerNeurons[layerNeurons.length - 1] + "]";
 		return toString;
+	}
+
+	public void writeOut(int layer, File path){
+		
+		File layerFolder = new File(path.getAbsolutePath() + "/" + "Layer " + layer );
+		
+		layerFolder.mkdir();
+		
+		for(int i = 0; i < layerNeurons.length; i++){
+			layerNeurons[i].writeOut(i, layerFolder);
+		}
+		
+		File layerInfo = new File(layerFolder.getAbsolutePath() + "/" + "Layer " + layer + ".csv");
+		
+		try {
+			CSVWriter csvOutput = new CSVWriter(new FileWriter(layerInfo, true), ',');
+			
+			csvOutput.write("Neuron Index");
+			csvOutput.write("Neurons");
+			csvOutput.endRecord();
+			
+			for(int i = 0; i < layerNeurons.length; i++){
+				csvOutput.write(String.valueOf(i));
+				csvOutput.write(layerNeurons[i].toString());
+				csvOutput.endRecord();
+			}
+			
+			csvOutput.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Random;
+
+import CSVWorker.CSVWriter;
+
 import java.io.PrintWriter;
 
 public class Neuron {
@@ -286,71 +289,29 @@ public class Neuron {
 		}
 	}
 	
-	public void CSVwriter(int number) throws FileNotFoundException, IOException {
-
-		String NEW_LINE_SEPARATOR = "/n";
-		String COMMA_DELIMITER = ",";
-
-		Object[] FILE_HEADER = { "Weight Number", "Weights" };
-		String filename = "Neuron" + number + ".csv";
-		// File csv = new File("filename");
-		// csv.createNewFile();
-		ArrayList<String> objects = new ArrayList<String>();
-
-		for (int i = 0; i < weight.length; i++) {
-			BigDecimal f = weight[i];
-			objects.add(f.toString());
+	public void writeOut(int neuron, File path){
+		
+		if(status != NeuralStatus.Output){
+			File neuronCSV = new File(path.getAbsolutePath() + "/" + "Neuron " + neuron + ".csv");
+			
+			try {
+				CSVWriter csvOutput = new CSVWriter(new FileWriter(neuronCSV, true), ',');
+				
+				csvOutput.write("Weight Index");
+				csvOutput.write("Weights");
+				csvOutput.endRecord();
+				
+				for(int i = 0; i < weight.length; i++){
+					csvOutput.write(String.valueOf(i));
+					csvOutput.write(weight[i].toString());
+					csvOutput.endRecord();
+				}
+				
+				csvOutput.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
-		FileWriter fileWriter = null;
-
-		// try {
-		PrintWriter pw = new PrintWriter(new File(filename));
-		// fileWriter = new FileWriter(filename);
-		pw.append("Weight Number");
-		pw.append(",");
-		pw.append("Weights");
-		System.out.println(filename);
-		pw.append("\n");
-
-		// for (int i = 0; i < weight.length; i++) {
-		// Float f = weight[i];
-		pw.append("test");
-
-		pw.append(",");
-
-		pw.append("Test2");
-
-		pw.append("\n");
-
-		// }
-
-		System.out.println("CSV file was created successfully !!!");
-		pw.close();
-
-		// } catch (Exception e) {
-
-		// System.out.println("Error in CsvFileWriter !!!");
-
-		// e.printStackTrace();
-
-		// } finally {
-
-		// try {
-
-		// fileWriter.flush();
-
-		// fileWriter.close();
-
-		// } catch (IOException e) {
-
-		// System.out.println("Error while flushing/closing fileWriter !!!");
-
-		// e.printStackTrace();
-
-		// }
-
-		// }
-
 	}
 }

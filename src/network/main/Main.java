@@ -33,6 +33,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {
+		
 		int[] layers = {2, 3, 1};
 		Neuron[] inputs = new Neuron[layers[0]];
 		Neuron[] dinputs = new Neuron[layers[0]];
@@ -52,12 +53,10 @@ public class Main {
 		
 		inputs[0] = new Neuron(BigDecimal.ONE);
         dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
-        //inputs[0].CSVwriter(0);
         inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
         dinputs[1] = new Neuron(reduce(inputs[1].getNeuron()));
         expected[0] = testFunc(inputs[0].getNeuron(), inputs[1].getNeuron());
 		dexpected[0] = reduce(expected[0]);
-        // inputs[1].CSVwriter(1);
 
 		int j = 1;
 		int numberOfGoodResults = 0;

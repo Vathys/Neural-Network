@@ -1,12 +1,19 @@
 package network.main;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+
+import CSVWorker.CSVWriter;
 
 public class FeedForwardNeuralNetwork {
 	private int[] layers;
 	private BigDecimal learningRate;
 	private NeuronLayer[] neuronLayer;
-	
 	/**
 	 * Constructor
 	 * 
@@ -101,6 +108,18 @@ public class FeedForwardNeuralNetwork {
 	public void mutate(float chance){
 		for(int i = 0; i < neuronLayer.length - 1; i++){
 			neuronLayer[i].mutate(chance);
+		}
+	}
+	
+	public void writeOut(String filename){ 
+		
+		File savedNN = new File("Saved NN");
+		
+		File newSave = new File(savedNN + "/" + filename);
+		newSave.mkdir();
+		
+		for(int i = 0; i < neuronLayer.length; i++){
+			neuronLayer[i].writeOut(i, newSave);
 		}
 	}
 }
