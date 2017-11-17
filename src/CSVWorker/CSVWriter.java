@@ -31,7 +31,7 @@ import java.nio.charset.Charset;
 /**
  * A stream based writer for writing delimited text data to a file or a stream.
  */
-public class CsvWriter {
+public class CSVWriter {
 	private Writer outputStream = null;
 	
 	private String fileName = null;
@@ -64,7 +64,7 @@ public class CsvWriter {
 	public static final int ESCAPE_MODE_BACKSLASH = 2;
 
 	/**
-	 * Creates a {@link com.csvreader.CsvWriter CsvWriter} object using a file
+	 * Creates a {@link com.CSVWriter.CsvWriter CsvWriter} object using a file
 	 * as the data destination.
 	 * 
 	 * @param fileName
@@ -75,7 +75,7 @@ public class CsvWriter {
 	 *            The {@link java.nio.charset.Charset Charset} to use while
 	 *            writing the data.
 	 */
-	public CsvWriter(String fileName, char delimiter, Charset charset) {
+	public CSVWriter(String fileName, char delimiter, Charset charset) {
 		if (fileName == null) {
 			throw new IllegalArgumentException("Parameter fileName can not be null.");
 		}
@@ -90,19 +90,19 @@ public class CsvWriter {
 	}
 
 	/**
-	 * Creates a {@link com.csvreader.CsvWriter CsvWriter} object using a file
+	 * Creates a {@link com.CSVWriter.CsvWriter CsvWriter} object using a file
 	 * as the data destination.&nbsp;Uses a comma as the column delimiter and
 	 * ISO-8859-1 as the {@link java.nio.charset.Charset Charset}.
 	 * 
 	 * @param fileName
 	 *            The path to the file to output the data.
 	 */
-	public CsvWriter(String fileName) {
+	public CSVWriter(String fileName) {
 		this(fileName, Letters.COMMA, Charset.forName("ISO-8859-1"));
 	}
 
 	/**
-	 * Creates a {@link com.csvreader.CsvWriter CsvWriter} object using a Writer
+	 * Creates a {@link com.CSVWriter.CsvWriter CsvWriter} object using a Writer
 	 * to write data to.
 	 * 
 	 * @param outputStream
@@ -110,7 +110,7 @@ public class CsvWriter {
 	 * @param delimiter
 	 *            The character to use as the column delimiter.
 	 */
-	public CsvWriter(Writer outputStream, char delimiter) {
+	public CSVWriter(Writer outputStream, char delimiter) {
 		if (outputStream == null) {
 			throw new IllegalArgumentException("Parameter outputStream can not be null.");
 		}
@@ -121,7 +121,7 @@ public class CsvWriter {
 	}
 
 	/**
-	 * Creates a {@link com.csvreader.CsvWriter CsvWriter} object using an
+	 * Creates a {@link com.CSVWriter.CsvWriter CsvWriter} object using an
 	 * OutputStream to write data to.
 	 * 
 	 * @param outputStream
@@ -132,7 +132,7 @@ public class CsvWriter {
 	 *            The {@link java.nio.charset.Charset Charset} to use while
 	 *            writing the data.
 	 */
-	public CsvWriter(OutputStream outputStream, char delimiter, Charset charset) {
+	public CSVWriter(OutputStream outputStream, char delimiter, Charset charset) {
 		this(new OutputStreamWriter(outputStream, charset), delimiter);
 	}
 

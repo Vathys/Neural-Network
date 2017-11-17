@@ -37,7 +37,7 @@ import java.util.HashMap;
  * A stream based parser for parsing delimited text data from a file or a
  * stream.
  */
-public class CsvReader {
+public class CSVReader {
 	private Reader inputStream = null;
 
 	private String fileName = null;
@@ -101,7 +101,7 @@ public class CsvReader {
 	public static final int ESCAPE_MODE_BACKSLASH = 2;
 
 	/**
-	 * Creates a {@link com.csvreader.CsvReader CsvReader} object using a file
+	 * Creates a {@link com.CSVReader.CsvReader CsvReader} object using a file
 	 * as the data source.
 	 * 
 	 * @param fileName
@@ -112,7 +112,7 @@ public class CsvReader {
 	 *            The {@link java.nio.charset.Charset Charset} to use while
 	 *            parsing the data.
 	 */
-	public CsvReader(String fileName, char delimiter, Charset charset)
+	public CSVReader(String fileName, char delimiter, Charset charset)
 			throws FileNotFoundException {
 		if (fileName == null) {
 			throw new IllegalArgumentException(
@@ -137,7 +137,7 @@ public class CsvReader {
 	}
 
 	/**
-	 * Creates a {@link com.csvreader.CsvReader CsvReader} object using a file
+	 * Creates a {@link com.CSVReader.CsvReader CsvReader} object using a file
 	 * as the data source.&nbsp;Uses ISO-8859-1 as the
 	 * {@link java.nio.charset.Charset Charset}.
 	 * 
@@ -146,25 +146,25 @@ public class CsvReader {
 	 * @param delimiter
 	 *            The character to use as the column delimiter.
 	 */
-	public CsvReader(String fileName, char delimiter)
+	public CSVReader(String fileName, char delimiter)
 			throws FileNotFoundException {
 		this(fileName, delimiter, Charset.forName("ISO-8859-1"));
 	}
 
 	/**
-	 * Creates a {@link com.csvreader.CsvReader CsvReader} object using a file
+	 * Creates a {@link com.CSVReader.CsvReader CsvReader} object using a file
 	 * as the data source.&nbsp;Uses a comma as the column delimiter and
 	 * ISO-8859-1 as the {@link java.nio.charset.Charset Charset}.
 	 * 
 	 * @param fileName
 	 *            The path to the file to use as the data source.
 	 */
-	public CsvReader(String fileName) throws FileNotFoundException {
+	public CSVReader(String fileName) throws FileNotFoundException {
 		this(fileName, Letters.COMMA);
 	}
 
 	/**
-	 * Constructs a {@link com.csvreader.CsvReader CsvReader} object using a
+	 * Constructs a {@link com.CSVReader.CsvReader CsvReader} object using a
 	 * {@link java.io.Reader Reader} object as the data source.
 	 * 
 	 * @param inputStream
@@ -172,7 +172,7 @@ public class CsvReader {
 	 * @param delimiter
 	 *            The character to use as the column delimiter.
 	 */
-	public CsvReader(Reader inputStream, char delimiter) {
+	public CSVReader(Reader inputStream, char delimiter) {
 		if (inputStream == null) {
 			throw new IllegalArgumentException(
 					"Parameter inputStream can not be null.");
@@ -186,19 +186,19 @@ public class CsvReader {
 	}
 
 	/**
-	 * Constructs a {@link com.csvreader.CsvReader CsvReader} object using a
+	 * Constructs a {@link com.CSVReader.CsvReader CsvReader} object using a
 	 * {@link java.io.Reader Reader} object as the data source.&nbsp;Uses a
 	 * comma as the column delimiter.
 	 * 
 	 * @param inputStream
 	 *            The stream to use as the data source.
 	 */
-	public CsvReader(Reader inputStream) {
+	public CSVReader(Reader inputStream) {
 		this(inputStream, Letters.COMMA);
 	}
 
 	/**
-	 * Constructs a {@link com.csvreader.CsvReader CsvReader} object using an
+	 * Constructs a {@link com.CSVReader.CsvReader CsvReader} object using an
 	 * {@link java.io.InputStream InputStream} object as the data source.
 	 * 
 	 * @param inputStream
@@ -209,12 +209,12 @@ public class CsvReader {
 	 *            The {@link java.nio.charset.Charset Charset} to use while
 	 *            parsing the data.
 	 */
-	public CsvReader(InputStream inputStream, char delimiter, Charset charset) {
+	public CSVReader(InputStream inputStream, char delimiter, Charset charset) {
 		this(new InputStreamReader(inputStream, charset), delimiter);
 	}
 
 	/**
-	 * Constructs a {@link com.csvreader.CsvReader CsvReader} object using an
+	 * Constructs a {@link com.CSVReader.CsvReader CsvReader} object using an
 	 * {@link java.io.InputStream InputStream} object as the data
 	 * source.&nbsp;Uses a comma as the column delimiter.
 	 * 
@@ -224,7 +224,7 @@ public class CsvReader {
 	 *            The {@link java.nio.charset.Charset Charset} to use while
 	 *            parsing the data.
 	 */
-	public CsvReader(InputStream inputStream, Charset charset) {
+	public CSVReader(InputStream inputStream, Charset charset) {
 		this(new InputStreamReader(inputStream, charset));
 	}
 
@@ -463,10 +463,10 @@ public class CsvReader {
 
 	/**
 	 * Gets the count of headers read in by a previous call to
-	 * {@link com.csvreader.CsvReader#readHeaders readHeaders()}.
+	 * {@link com.CSVReader.CsvReader#readHeaders readHeaders()}.
 	 * 
 	 * @return The count of headers read in by a previous call to
-	 *         {@link com.csvreader.CsvReader#readHeaders readHeaders()}.
+	 *         {@link com.CSVReader.CsvReader#readHeaders readHeaders()}.
 	 */
 	public int getHeaderCount() {
 		return headersHolder.Length;
@@ -557,22 +557,22 @@ public class CsvReader {
 	}
 
 	/**
-	 * Creates a {@link com.csvreader.CsvReader CsvReader} object using a string
+	 * Creates a {@link com.CSVReader.CsvReader CsvReader} object using a string
 	 * of data as the source.&nbsp;Uses ISO-8859-1 as the
 	 * {@link java.nio.charset.Charset Charset}.
 	 * 
 	 * @param data
 	 *            The String of data to use as the source.
-	 * @return A {@link com.csvreader.CsvReader CsvReader} object using the
+	 * @return A {@link com.CSVReader.CsvReader CsvReader} object using the
 	 *         String of data as the source.
 	 */
-	public static CsvReader parse(String data) {
+	public static CSVReader parse(String data) {
 		if (data == null) {
 			throw new IllegalArgumentException(
 					"Parameter data can not be null.");
 		}
 
-		return new CsvReader(new StringReader(data));
+		return new CSVReader(new StringReader(data));
 	}
 
 	/**
@@ -1458,7 +1458,7 @@ public class CsvReader {
 	/**
 	 * Skips the next record of data by parsing each column.&nbsp;Does not
 	 * increment
-	 * {@link com.csvreader.CsvReader#getCurrentRecord getCurrentRecord()}.
+	 * {@link com.CSVReader.CsvReader#getCurrentRecord getCurrentRecord()}.
 	 * 
 	 * @return Whether another record was successfully skipped or not.
 	 * @exception IOException
@@ -1739,7 +1739,7 @@ public class CsvReader {
 			RecordDelimiter = Letters.NULL;
 			Comment = Letters.POUND;
 			UseComments = false;
-			EscapeMode = CsvReader.ESCAPE_MODE_DOUBLED;
+			EscapeMode = CSVReader.ESCAPE_MODE_DOUBLED;
 			SafetySwitch = true;
 			SkipEmptyRecords = true;
 			CaptureRawRecord = true;
