@@ -57,25 +57,7 @@ public class Main {
         expected[0] = testFunc(inputs[0].getNeuron(), inputs[1].getNeuron());
 		dexpected[0] = reduce(expected[0]);
 		
-		double averageError = 1;
-		while(Math.abs(averageError) > stopValue){
-			n.mutate(1f);
-			n.FeedForward(dinputs);
-			BigDecimal error = n.getError(dexpected);
-			averageError = error.doubleValue();
-			//System.out.println(averageError);
-		}
-		for(int i = 1; i <= numberOfIterations; i++){
-			
-		    n.FeedForward(dinputs);
-		   
-			n.backProp(dexpected);
-			
-		}
-		
-		n.writeOut("test");
-		
-		/*int j = 1;
+		int j = 1;
 		int numberOfGoodResults = 0;
 		while(true){
 			long startTime = System.nanoTime();
@@ -107,7 +89,7 @@ public class Main {
 			System.out.println("Time: " + (endTime - startTime) / 1000000000);
 			j++;
 			Thread.sleep(300);
-		}*/
+		}
 	}
 
 	/**
