@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Random;
 
-import gui.LoadGui;
 
 public class Main {
 	
@@ -59,8 +58,6 @@ public class Main {
         expected[0] = testFunc(inputs[0].getNeuron(), inputs[1].getNeuron());
 		dexpected[0] = reduce(expected[0]);
         // inputs[1].CSVwriter(1);
-		
-		LoadGui gui = new LoadGui("Neural Network");
 
 		int j = 1;
 		int numberOfGoodResults = 0;
