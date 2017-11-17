@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Random;
 
+import gui.ListDemo;
+import gui.LoadGui;
+
 public class Main {
 	
 	public static BigDecimal testFunc(BigDecimal input1, BigDecimal input2){
@@ -44,6 +47,9 @@ public class Main {
 		int numberOfIterations = 1000;
 		double stopValue = .35;
 
+		ListDemo gui = new ListDemo();
+		gui.createAndShowGUI();
+		
 		/*
 		 * Testing 
 		 * f(x, y) = (x + 5^(1/2))/y
