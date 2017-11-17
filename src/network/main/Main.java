@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Random;
 
-import gui.ListDemo;
 import gui.LoadGui;
 
 public class Main {
@@ -46,9 +45,6 @@ public class Main {
 		NeuronLayer output;
 		int numberOfIterations = 1000;
 		double stopValue = .35;
-
-		ListDemo gui = new ListDemo();
-		gui.createAndShowGUI();
 		
 		/*
 		 * Testing 
@@ -64,6 +60,7 @@ public class Main {
 		dexpected[0] = reduce(expected[0]);
         // inputs[1].CSVwriter(1);
 		
+		LoadGui gui = new LoadGui("Neural Network");
 
 		int j = 1;
 		int numberOfGoodResults = 0;

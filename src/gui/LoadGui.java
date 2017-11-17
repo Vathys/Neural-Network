@@ -8,25 +8,20 @@ public class LoadGui {
 	
 	public LoadGui(String frameName){
 		JFrame frame = new JFrame(frameName);
+		frame.setSize(500, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final JLabel label = new JLabel();
+		label.setSize(500,100);
 		
-		JLabel emptyLabel = new JLabel("");
-		emptyLabel.setPreferredSize(new Dimension(500,500));
-		frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
+		final DefaultListModel<String> l1 = new DefaultListModel<>();
+		l1.addElement("asdf");
 		
-		String[] data = {"test", "Deeps Fault", "dab"};
-		JList list = new JList(data);
-		list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		list.setVisibleRowCount(-1);
-		
-		JScrollPane listScroller = new JScrollPane(list);
-		listScroller.setPreferredSize(new Dimension(250, 80));
-		frame.getContentPane().add(listScroller, BorderLayout.CENTER);
-		
-		frame.pack();
+		JList<String> list = new JList<>();
+		list.setModel(l1);
+		list.setBounds(frame.getWidth()/2 - 50, frame.getHeight()/2 - 50, 100, 100);
+		frame.add(list);
+		frame.setLayout(null);
 		frame.setVisible(true);
 	}
-	
 
 }
