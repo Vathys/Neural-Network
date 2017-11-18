@@ -11,22 +11,6 @@ public class LoadGUI extends JFrame implements ActionListener{
 	private JPanel contentPane;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoadGUI frame = new LoadGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public LoadGUI() {
@@ -76,7 +60,16 @@ public class LoadGUI extends JFrame implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e){
 		if(e.getActionCommand().equals("Create")){
-			
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						CreateGUI frame = new CreateGUI();
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		}
 		if(e.getActionCommand().equals("Load")){
 			

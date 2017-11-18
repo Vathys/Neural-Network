@@ -1,9 +1,12 @@
 package network.main;
 
+import java.awt.EventQueue;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Random;
+
+import GUI.LoadGUI;
 
 
 public class Main {
@@ -32,7 +35,20 @@ public class Main {
 		return result;
 	}
 	
-	public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					LoadGUI frame = new LoadGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public static void newNeuralNetwork() throws InterruptedException, FileNotFoundException, IOException {
 		
 		int[] layers = {2, 3, 1};
 		Neuron[] inputs = new Neuron[layers[0]];
