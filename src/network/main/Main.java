@@ -11,6 +11,14 @@ import GUI.LoadGUI;
 
 public class Main {
 	
+	
+	private static double learningRate = .05;
+	private static LoadGUI frame = null;
+	private static int numberOfIterations = 1000;
+	private static double stopValue = .35;
+	private static boolean isPaused = true;
+	private static boolean isCalculating = true;
+	
 	public static BigDecimal testFunc(BigDecimal input1, BigDecimal input2){
 		BigDecimal result = BigDecimal.ONE;
 		
@@ -39,75 +47,148 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoadGUI frame = new LoadGUI();
+					frame = new LoadGUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		while(true){
+			try {
+				isPaused = true;
+				isCalculating = true;
+				newNeuralNetwork();
+			} catch (InterruptedException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public static void newNeuralNetwork() throws InterruptedException, FileNotFoundException, IOException {
+		while(isCalculating){ //Loops through until the code is Started within the CreateGUI or the LoadedGUI class
+			if(!isPaused()){
+				int[] layers = {2, 3, 1};
+				Neuron[] inputs = new Neuron[layers[0]];
+				Neuron[] dinputs = new Neuron[layers[0]];
+				BigDecimal[] expected = new BigDecimal[layers[layers.length - 1]];
+				BigDecimal[] dexpected = new BigDecimal[layers[layers.length - 1]];
 		
-		int[] layers = {2, 3, 1};
-		Neuron[] inputs = new Neuron[layers[0]];
-		Neuron[] dinputs = new Neuron[layers[0]];
-		BigDecimal[] expected = new BigDecimal[layers[layers.length - 1]];
-		BigDecimal[] dexpected = new BigDecimal[layers[layers.length - 1]];
-
-		double learningRate = .05;
-		FeedForwardNeuralNetwork n = new FeedForwardNeuralNetwork(layers, BigDecimal.valueOf(learningRate));
-		NeuronLayer output;
-		int numberOfIterations = 1000;
-		double stopValue = .35;
-		
-		/*
-		 * Testing 
-		 * f(x, y) = (x + 5^(1/2))/y
-		 **/
-		
-		inputs[0] = new Neuron(BigDecimal.ONE);
-        dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
-        inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
-        dinputs[1] = new Neuron(reduce(inputs[1].getNeuron()));
-        expected[0] = testFunc(inputs[0].getNeuron(), inputs[1].getNeuron());
-		dexpected[0] = reduce(expected[0]);
-
-		int j = 1;
-		int numberOfGoodResults = 0;
-		while(true){
-			long startTime = System.nanoTime();
-			n = new FeedForwardNeuralNetwork(layers, BigDecimal.valueOf(learningRate));
-			double averageError = 1;
-			while(Math.abs(averageError) > stopValue){
-				n.mutate(1f);
-				n.FeedForward(dinputs);
-				BigDecimal error = n.getError(dexpected);
-				averageError = error.doubleValue();
-				//System.out.println(averageError);
-			}
-			for(int i = 1; i <= numberOfIterations; i++){
+				FeedForwardNeuralNetwork n = new FeedForwardNeuralNetwork(layers, BigDecimal.valueOf(learningRate));
+				NeuronLayer output;
 				
-			    n.FeedForward(dinputs);
-			   
-				n.backProp(dexpected);
 				
+				/*
+				 * Testing 
+				 * f(x, y) = (x + 5^(1/2))/y
+				 **/
+				
+				inputs[0] = new Neuron(BigDecimal.ONE);
+		        dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
+		        inputs[1] = new Neuron(BigDecimal.ONE.add(BigDecimal.ONE));
+		        dinputs[1] = new Neuron(reduce(inputs[1].getNeuron()));
+		        expected[0] = testFunc(inputs[0].getNeuron(), inputs[1].getNeuron());
+				dexpected[0] = reduce(expected[0]);
+		
+				int j = 1;
+				int numberOfGoodResults = 0;
+				while(isCalculating){ //loops through until the code is not paused or until the code is reset/stopped within the CreateGUI or the LoadGUI class
+					if(!isPaused()){
+						long startTime = System.nanoTime();
+						n = new FeedForwardNeuralNetwork(layers, BigDecimal.valueOf(learningRate));
+						double averageError = 1;
+						while(Math.abs(averageError) > stopValue){
+							n.mutate(1f);
+							n.FeedForward(dinputs);
+							BigDecimal error = n.getError(dexpected);
+							averageError = error.doubleValue();
+							//System.out.println(averageError);
+						}
+						for(int i = 1; i <= numberOfIterations; i++){
+							
+						    n.FeedForward(dinputs);
+						   
+							n.backProp(dexpected);
+							
+						}
+						System.out.println("Trial: " + j);
+						
+						output = new NeuronLayer(n.getOutputLayer());
+						System.out.println((output.getLayerNeurons()[0].getNeuron()) + " : "+ dexpected[0]);
+						if(n.getError(dexpected).floatValue() < .01f){
+							numberOfGoodResults++;
+						}
+						System.out.println("Good Results: " + numberOfGoodResults);
+						long endTime = System.nanoTime();
+						System.out.println("Time: " + (endTime - startTime) / 1000000000);
+						j++;
+						Thread.sleep(300);
+					}
+					else{ //This is needed to have the program work for some reason, but lets the user know that the program is either paused or stopped
+						System.out.println("PROGRAM IS PAUSED");
+						Thread.sleep(1000);
+					}
+				}
 			}
-			System.out.println("Trial: " + j);
-			
-			output = new NeuronLayer(n.getOutputLayer());
-			System.out.println((output.getLayerNeurons()[0].getNeuron()) + " : "+ dexpected[0]);
-			if(n.getError(dexpected).floatValue() < .01f){
-				numberOfGoodResults++;
+			else{
+				System.out.println("PROGRAM IS PAUSED");
+				Thread.sleep(1000);
 			}
-			System.out.println("Good Results: " + numberOfGoodResults);
-			long endTime = System.nanoTime();
-			System.out.println("Time: " + (endTime - startTime) / 1000000000);
-			j++;
-			Thread.sleep(300);
 		}
 	}
+
+	public static void setLearningRate(double learningRate) {
+		Main.learningRate = learningRate;
+	}
+
+	public static LoadGUI getFrame() {
+		return frame;
+	}
+
+	public static int getNumberOfIterations() {
+		return numberOfIterations;
+	}
+
+	public static void setNumberOfIterations(int numberOfIterations) {
+		Main.numberOfIterations = numberOfIterations;
+	}
+
+	public static double getStopValue() {
+		return stopValue;
+	}
+
+	public static void setStopValue(double stopValue) {
+		Main.stopValue = stopValue;
+	}
+
+	public static double getLearningRate() {
+		return learningRate;
+	}
+
+	public static void setFrame(LoadGUI frame) {
+		Main.frame = frame;
+	}
+
+	public static boolean isPaused() {
+		return isPaused;
+	}
+
+	public static void setPaused(boolean isPaused) {
+		Main.isPaused = isPaused;
+	}
+
+	public static boolean isCalculating() {
+		return isCalculating;
+	}
+
+	public static void setCalculating(boolean isCalculating) {
+		Main.isCalculating = isCalculating;
+	}
+	
+	
+	
+	
 
 	/**
 	 * Test 1

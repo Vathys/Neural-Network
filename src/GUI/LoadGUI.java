@@ -4,12 +4,19 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class LoadGUI extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
+	private ArrayList<String> values = new ArrayList<String>();
 
+	private JList<String> list = new JList<String>();
+	
+
+	private static JButton CreateButton = new JButton("Create");
+	private static JButton LoadButton = new JButton("Load");
 	/**
 	 * Create the frame.
 	 */
@@ -21,17 +28,15 @@ public class LoadGUI extends JFrame implements ActionListener{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
+
 		
-		
-		JList<String> list = new JList<String>();
 		list.setModel(new AbstractListModel<String>() {
 			private static final long serialVersionUID = 1L;
-			String[] values = new String[] {"test", "lol", "neural", "network"};
 			public int getSize() {
-				return values.length;
+				return values.size();
 			}
 			public String getElementAt(int index) {
-				return values[index];
+				return values.get(index);
 			}
 		});
 		list.setBorder(new TitledBorder(null, "TestList", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -42,7 +47,7 @@ public class LoadGUI extends JFrame implements ActionListener{
 		contentPane.add(ButtonPanel, BorderLayout.SOUTH);
 		ButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
 		
-		JButton LoadButton = new JButton("Load");
+		LoadButton.addActionListener(this);
 		LoadButton.setPreferredSize(new Dimension(150, 40));
 		LoadButton.setActionCommand("Load");
 		ButtonPanel.add(LoadButton);
@@ -50,7 +55,6 @@ public class LoadGUI extends JFrame implements ActionListener{
 		Component horizontalStrut = Box.createHorizontalStrut(100);
 		ButtonPanel.add(horizontalStrut);
 		
-		JButton CreateButton = new JButton("Create");
 		CreateButton.addActionListener(this);
 		CreateButton.setPreferredSize(new Dimension(150, 40));
 		CreateButton.setActionCommand("Create");
@@ -63,8 +67,10 @@ public class LoadGUI extends JFrame implements ActionListener{
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {
+						CreateButton.setEnabled(false); // Disables the create Button when a CreateGUI is already open
 						CreateGUI frame = new CreateGUI();
 						frame.setVisible(true);
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -72,7 +78,31 @@ public class LoadGUI extends JFrame implements ActionListener{
 			});
 		}
 		if(e.getActionCommand().equals("Load")){
-			
 		}
 	}
+
+	public void insertElement(String value){
+		values.add(value);
+		list.setModel(new AbstractListModel<String>() {
+			private static final long serialVersionUID = 1L;
+			public int getSize() {
+				return values.size();
+			}
+			public String getElementAt(int index) {
+				return values.get(index);
+			}
+		});
+	}
+
+	public static JButton getCreateButton() {
+		return CreateButton;
+	}
+
+	public static JButton getLoadButton() {
+		return LoadButton;
+	}
+	
+	
+	
+	
 }
