@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import CSVWorker.CSVWriter;
 
-public class FeedForwardNeuralNetwork {
+public class NeuralNetwork {
 	private int[] layers;
 	private BigDecimal learningRate;
 	private NeuronLayer[] neuronLayer;
@@ -22,7 +22,7 @@ public class FeedForwardNeuralNetwork {
 	 * @param learningRate
 	 * 	the learning rate
 	 */
-	public FeedForwardNeuralNetwork(int[] layers, BigDecimal learningRate){
+	public NeuralNetwork(int[] layers, BigDecimal learningRate){
 		this.layers =  new int[layers.length];
 		this.learningRate = learningRate;
 		for(int i = 0; i < layers.length; i++){
@@ -111,7 +111,7 @@ public class FeedForwardNeuralNetwork {
 		}
 	}
 	
-	public void writeOut(String filename){ 
+	public void initFile(String filename){ 
 		
 		File savedNN = new File("Saved NN");
 		
@@ -119,7 +119,18 @@ public class FeedForwardNeuralNetwork {
 		newSave.mkdir();
 		
 		for(int i = 0; i < neuronLayer.length; i++){
-			neuronLayer[i].writeOut(i, newSave);
+			neuronLayer[i].initFile(i, newSave);
+		}
+	}
+
+	public void writeOut(String filename){
+		
+		File savedNN = new File("Saved NN");
+		
+		File newSave = new File(savedNN + "/" + filename);
+		
+		for(int i = 0; i < neuronLayer.length; i++){
+			neuronLayer[i].writeOutInfo(i, newSave);
 		}
 	}
 }

@@ -289,8 +289,20 @@ public class Neuron {
 		}
 	}
 	
-	public void writeOut(int neuron, File path){
+	public void initFile(int neuron, File path){
+		if(status != NeuralStatus.Output){
+			File neuronCSV = new File(path.getAbsolutePath() + "/" + "Neuron " + neuron + ".csv");
+			try {
+				neuronCSV.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
+	}
+	
+	public void writeOutInfo(int neuron, File path){
 		if(status != NeuralStatus.Output){
 			File neuronCSV = new File(path.getAbsolutePath() + "/" + "Neuron " + neuron + ".csv");
 			
@@ -314,4 +326,5 @@ public class Neuron {
 			}
 		}
 	}
+	
 }

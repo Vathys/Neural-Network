@@ -2,7 +2,9 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 
@@ -29,18 +31,26 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.Box;
 
-public class CreateGUI extends JFrame {
+public class CreateGUI extends JFrame implements ActionListener{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private JTabbedPane tabbedPane;
 	private JPanel contentPane;
 	private JButton btnSetChanges;
+	
+	
+	private String networkName;
+	private int networkSize;
+	private BigDecimal learningRate;
 	/**
 	 * Create the frame.
 	 */
@@ -48,6 +58,16 @@ public class CreateGUI extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							LoadGUI frame = new LoadGUI();
+							frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 				close();
 			}
 		});
@@ -57,109 +77,94 @@ public class CreateGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane);
 		
-		JComponent panel1 = makeTextPanel("Panel #1");
-		tabbedPane.addTab("Name", panel1);
-
-		JComponent panel2 = makeTextPanel("Panel #2");
-		tabbedPane.addTab("Iterations", panel2);
-
-		JComponent panel3 = makeTextPanel("Panel #3");
-		tabbedPane.addTab("Start/Stop", panel3);
+		JPanel panel1 = makeTextPanel("Panel #1");
+		tabbedPane.addTab("Name", null, panel1, null);
 		
-		JComponent panel4 = makeTextPanel("Panel #4");
-		tabbedPane.addTab("StopValue", panel4);
+		JPanel panel2 = makeTextPanel("Panel #2");
+		tabbedPane.addTab("Layers", null, panel2, null);
 		
-		JComponent panel5 = makeTextPanel("Panel #5");
-		tabbedPane.addTab("LearningRate", panel5);
+		JPanel panel3 = makeTextPanel("Panel #3");
+		tabbedPane.addTab("LearningRate", null, panel3, null);
+		
+		JPanel panel4 = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panel4.getLayout();
+		flowLayout.setVgap(90);
+		
+		JButton btn = new JButton("Continue");
+		
+		btn.addActionListener(this);
+		
+		panel4.add(btn);
+		tabbedPane.addTab("Continue", null, panel4, null);
 	}
 
-	protected JComponent makeTextPanel(String text) {
+	protected JPanel makeTextPanel(String text) {
 	    JPanel panel = new JPanel(false);
 	    panel.setBackground(Color.LIGHT_GRAY);
-	    panel.setLayout(null);
+	    panel.setLayout(new BorderLayout(0, 0));
 	    
-	    if(text.equals("Panel #3")){ //Loads the Stop, Start, Pause buttons for only this panel
-		    JButton btnStop = new JButton("RESTART/STOP");
-		    JButton btnPause = new JButton("PAUSE");
-		    JButton btnStart = new JButton("START");
-		    btnStart.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    		Main.setPaused(false);
-		    		btnStart.setEnabled(false); //determines which button is clickable
-		    		btnPause.setEnabled(true);
-		    		btnStop.setEnabled(true);
-		    	}
-		    });
-		    btnStart.setBounds(120, 15, 200, 50); //x , y , width, height
-		    panel.add(btnStart);
-		    
-		    btnPause.addActionListener(new ActionListener() { //Pauses the Neural Network
-		    	public void actionPerformed(ActionEvent e) {
-		    		Main.setPaused(true);
-		    		btnPause.setEnabled(false); //determines which button is clickable
-		    		btnStart.setEnabled(true);
-		    		btnStop.setEnabled(true);
-		    	}
-		    });
-		    btnPause.setEnabled(false);
-		    btnPause.setBounds(120, 85, 200, 50); //x , y , width, height
-		    panel.add(btnPause);
-		    
-		    btnStop.addActionListener(new ActionListener() { //Stops the Neural Network
-		    	public void actionPerformed(ActionEvent e) {
-		    		Main.setCalculating(false);
-		    		btnPause.setEnabled(false); //determines which button is clickable
-		    		btnStart.setEnabled(true);
-		    		btnStop.setEnabled(false);
-		    	}
-		    });
-		    btnStop.setEnabled(false);
-		    btnStop.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		    btnStop.setBounds(120, 155, 200, 50); //x , y , width, height
-		    panel.add(btnStop);
+	    JPanel mainPanel = new JPanel();
+	    mainPanel.setBorder(new EmptyBorder(40, 1, 20, 1));
+	    mainPanel.setLayout(new BorderLayout(0, 0));
+	    
+	    panel.add(mainPanel, BorderLayout.CENTER);
+	    
+	    JPanel textPanel = new JPanel();
+	    mainPanel.add(textPanel, BorderLayout.SOUTH);
+	    
+	    JLabel tabLabel;
+	    
+	    if(text.equals("Panel #1")){
+	    	tabLabel = new JLabel("Name");
+		}
+	    else if(text.equals("Panel #2")){
+			tabLabel = new JLabel("Number of Layers");
+		}
+	    else if(text.equals("Panel #3")){
+			tabLabel = new JLabel("Learning Rate");
+		}
+	    else{
+	    	tabLabel = new JLabel();
 	    }
-	    else{ //All other panels unless specified will be like this
+		
+	    tabLabel.setHorizontalAlignment(SwingConstants.CENTER);
+	    mainPanel.add(tabLabel, BorderLayout.CENTER);
 	    
-		    btnSetChanges = new JButton("set changes");
-		    
-		    JTextField txt = new JTextField("", 20);
-		    txt.setBounds(131, 76, 158, 74); //x , y , width, height
-		    txt.setHorizontalAlignment(SwingConstants.CENTER);
-		    txt.setBackground(Color.WHITE);
-		    panel.add(txt);
-		    txt.setColumns(10);
-		    
-		   
-		    //Modifies the certain variable within the neural network
-		    btnSetChanges.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    		if(text.equals("Panel #1")){
-		    			Main.getFrame().insertElement(txt.getText()); //Adds the name typed in to the list on LoadGUI
-		    		}
-		    		if(text.equals("Panel #2")){
-		    			Main.setNumberOfIterations(Integer.valueOf(txt.getText())); //modifies the Number of Iterations
-		    		}
-		    		if(text.equals("Panel #3")){
-		    			//unused
-		    		}
-		    		if(text.equals("Panel #4")){
-		    			Main.setStopValue(Double.parseDouble(txt.getText())); //modifies the Stop Value
-		    		}
-		    		if(text.equals("Panel #5")){
-		    			Main.setLearningRate(Double.parseDouble(txt.getText())); //modifies the Learning Rate
-		    		}
-		    		
-		    		//Main.setLearningRate(.005);
-		    	}
-		    });
-		    btnSetChanges.setBounds(146, 189, 127, 23); //x , y , width, height
-		    panel.add(btnSetChanges);
+	    JTextField txt = new JTextField("", 20);
+	    textPanel.add(txt);
+	    txt.setHorizontalAlignment(SwingConstants.CENTER);
+	    txt.setBackground(Color.WHITE);
 
+	    JPanel ButtonPanel = new JPanel();
+		ButtonPanel.setBorder(new EmptyBorder(25, 10, 40, 25));
+		ButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+		
+
+	    btnSetChanges = new JButton("Set Changes");
 	    
-	    }
+	    btnSetChanges.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if(text.equals("Panel #1")){
+	    			Main.getFrame().insertElement(txt.getText()); //Adds the name typed in to the list on LoadGUI
+	    			networkName = txt.getText();
+	    		}
+	    		if(text.equals("Panel #2")){
+	    			networkSize = Integer.valueOf(txt.getText());
+	    		}
+	    		if(text.equals("Panel #3")){
+	    			learningRate = BigDecimal.valueOf(Double.valueOf(txt.getText()));
+	    		}
+	    		tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
+	    	}
+	    });
+		btnSetChanges.setPreferredSize(new Dimension(150, 40));
+		ButtonPanel.add(btnSetChanges);
+		
+		panel.add(ButtonPanel, BorderLayout.SOUTH);
+		
 	    return panel;
 	}
 	
@@ -167,7 +172,20 @@ public class CreateGUI extends JFrame {
 		Main.setCalculating(false);
 		LoadGUI.getCreateButton().setEnabled(true); //allows new creation gui to be loaded
 	}
-	
-	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		this.setVisible(false);
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					LayersGUI frame = new LayersGUI(networkName, networkSize, learningRate);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 }
 

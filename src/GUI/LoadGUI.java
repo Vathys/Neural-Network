@@ -3,12 +3,21 @@ package GUI;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+
+import network.main.Main;
+import network.main.NeuralNetwork;
+
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class LoadGUI extends JFrame implements ActionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ArrayList<String> values = new ArrayList<String>();
 
@@ -29,7 +38,15 @@ public class LoadGUI extends JFrame implements ActionListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
+		File folder = new File("Saved NN");
+		File[] listOfFiles = folder.listFiles();
 		
+		for(int i = 0; i < listOfFiles.length; i++){
+			if(listOfFiles[i].exists() && !listOfFiles[i].getName().equals(".DS_Store")){
+				values.add(listOfFiles[i].getName());
+				System.out.println(listOfFiles[i].getName());
+			}
+		}
 		list.setModel(new AbstractListModel<String>() {
 			private static final long serialVersionUID = 1L;
 			public int getSize() {
@@ -39,6 +56,7 @@ public class LoadGUI extends JFrame implements ActionListener{
 				return values.get(index);
 			}
 		});
+		
 		list.setBorder(new TitledBorder(null, "TestList", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.add(list);
 		
@@ -70,6 +88,7 @@ public class LoadGUI extends JFrame implements ActionListener{
 						CreateButton.setEnabled(false); // Disables the create Button when a CreateGUI is already open
 						CreateGUI frame = new CreateGUI();
 						frame.setVisible(true);
+						Main.frame.setVisible(false);
 						
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -101,8 +120,5 @@ public class LoadGUI extends JFrame implements ActionListener{
 	public static JButton getLoadButton() {
 		return LoadButton;
 	}
-	
-	
-	
 	
 }

@@ -13,11 +13,12 @@ public class Main {
 	
 	
 	private static double learningRate = .05;
-	private static LoadGUI frame = null;
-	private static int numberOfIterations = 1000;
-	private static double stopValue = .35;
+	public static LoadGUI frame = null;
 	private static boolean isPaused = true;
 	private static boolean isCalculating = true;
+	
+	private static int networkSize;
+	private static int[] layerSize;
 	
 	public static BigDecimal testFunc(BigDecimal input1, BigDecimal input2){
 		BigDecimal result = BigDecimal.ONE;
@@ -54,19 +55,10 @@ public class Main {
 				}
 			}
 		});
-		while(true){
-			try {
-				isPaused = true;
-				isCalculating = true;
-				newNeuralNetwork();
-			} catch (InterruptedException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		
 	}
 	
-	public static void newNeuralNetwork() throws InterruptedException, FileNotFoundException, IOException {
+	/*public static void newNeuralNetwork() throws InterruptedException, FileNotFoundException, IOException {
 		while(isCalculating){ //Loops through until the code is Started within the CreateGUI or the LoadedGUI class
 			if(!isPaused()){
 				int[] layers = {2, 3, 1};
@@ -79,10 +71,10 @@ public class Main {
 				NeuronLayer output;
 				
 				
-				/*
+				
 				 * Testing 
 				 * f(x, y) = (x + 5^(1/2))/y
-				 **/
+				 *
 				
 				inputs[0] = new Neuron(BigDecimal.ONE);
 		        dinputs[0] = new Neuron(reduce(inputs[0].getNeuron()));
@@ -136,38 +128,38 @@ public class Main {
 				Thread.sleep(1000);
 			}
 		}
-	}
-
-	public static void setLearningRate(double learningRate) {
-		Main.learningRate = learningRate;
-	}
-
+	}*/
+	
 	public static LoadGUI getFrame() {
 		return frame;
 	}
-
-	public static int getNumberOfIterations() {
-		return numberOfIterations;
+	
+	public static void setFrame(LoadGUI frame) {
+		Main.frame = frame;
+	}
+	
+	public static int getNetworkSize() {
+		return networkSize;
 	}
 
-	public static void setNumberOfIterations(int numberOfIterations) {
-		Main.numberOfIterations = numberOfIterations;
+	public static void setNetworkSize(int networkSize) {
+		Main.networkSize = networkSize;
+	}
+	
+	public static int[] getLayerSize() {
+		return layerSize;
 	}
 
-	public static double getStopValue() {
-		return stopValue;
-	}
-
-	public static void setStopValue(double stopValue) {
-		Main.stopValue = stopValue;
+	public static void setLayerSize(int[] layerSize) {
+		Main.layerSize = layerSize;
 	}
 
 	public static double getLearningRate() {
 		return learningRate;
 	}
 
-	public static void setFrame(LoadGUI frame) {
-		Main.frame = frame;
+	public static void setLearningRate(double learningRate) {
+		Main.learningRate = learningRate;
 	}
 
 	public static boolean isPaused() {
@@ -186,7 +178,11 @@ public class Main {
 		Main.isCalculating = isCalculating;
 	}
 	
-	
+	public static void newMainFunc(){
+		
+	}
+
+
 	
 	
 

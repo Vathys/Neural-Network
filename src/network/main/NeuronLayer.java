@@ -283,18 +283,35 @@ public class NeuronLayer {
 		return toString;
 	}
 
-	public void writeOut(int layer, File path){
+	public void initFile(int layer, File path){
 		
 		File layerFolder = new File(path.getAbsolutePath() + "/" + "Layer " + layer );
 		
 		layerFolder.mkdir();
 		
 		for(int i = 0; i < layerNeurons.length; i++){
-			layerNeurons[i].writeOut(i, layerFolder);
+			layerNeurons[i].initFile(i, layerFolder);
 		}
 		
 		File layerInfo = new File(layerFolder.getAbsolutePath() + "/" + "Layer " + layer + ".csv");
+		try {
+			layerInfo.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+	}
+	
+	public void writeOutInfo(int layer, File path){
+		File layerFolder = new File(path.getAbsolutePath() + "/" + "Layer " + layer );
+		
+		for(int i = 0; i < layerNeurons.length; i++){
+			layerNeurons[i].writeOutInfo(i, layerFolder);
+		}
+		
+		File layerInfo = new File(layerFolder.getAbsolutePath() + "/" + "Layer " + layer + ".csv");
+	
 		try {
 			CSVWriter csvOutput = new CSVWriter(new FileWriter(layerInfo, true), ',');
 			
@@ -313,6 +330,5 @@ public class NeuronLayer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 }
