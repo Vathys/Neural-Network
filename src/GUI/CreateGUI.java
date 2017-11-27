@@ -22,6 +22,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -29,12 +31,18 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Box;
 
 public class CreateGUI extends JFrame implements ActionListener{
@@ -46,6 +54,7 @@ public class CreateGUI extends JFrame implements ActionListener{
 	private JTabbedPane tabbedPane;
 	private JPanel contentPane;
 	private JButton btnSetChanges;
+	private JButton btn;
 	
 	
 	private String networkName;
@@ -55,6 +64,16 @@ public class CreateGUI extends JFrame implements ActionListener{
 	 * Create the frame.
 	 */
 	public CreateGUI() {
+		Action action = new AbstractAction("Set Changes"){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				btnSetChanges.doClick();
+				
+			}};
+		KeyStroke keyStroke;
+		keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+			
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
@@ -79,6 +98,9 @@ public class CreateGUI extends JFrame implements ActionListener{
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane);
+		
+		contentPane.getActionMap().put("Set Changes", action);
+		contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, "Set Changes");
 		
 		JPanel panel1 = makeTextPanel("Panel #1");
 		tabbedPane.addTab("Name", null, panel1, null);
@@ -155,9 +177,11 @@ public class CreateGUI extends JFrame implements ActionListener{
 	    			networkSize = Integer.valueOf(txt.getText());
 	    		}
 	    		if(text.equals("Panel #3")){
-	    			learningRate = BigDecimal.valueOf(Double.valueOf(txt.getText()));
+	    			//learningRate = BigDecimal.valueOf(Double.valueOf(txt.getText()));
 	    		}
-	    		tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
+	    		if(tabbedPane.getSelectedIndex() < 3){
+	    			tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
+	    		}
 	    	}
 	    });
 		btnSetChanges.setPreferredSize(new Dimension(150, 40));
