@@ -56,7 +56,6 @@ public class CreateGUI extends JFrame implements ActionListener{
 	private JButton btnSetChanges;
 	private JButton btn;
 	
-	
 	private String networkName;
 	private int networkSize;
 	private BigDecimal learningRate;
@@ -65,12 +64,16 @@ public class CreateGUI extends JFrame implements ActionListener{
 	 */
 	public CreateGUI() {
 		Action action = new AbstractAction("Set Changes"){
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				btnSetChanges.doClick();
-				
-			}};
+				if(tabbedPane.getSelectedIndex() == tabbedPane.getTabCount() - 1)
+					btn.doClick();
+				else
+					btnSetChanges.doClick();
+			}
+		};
 		KeyStroke keyStroke;
 		keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 			
@@ -115,7 +118,7 @@ public class CreateGUI extends JFrame implements ActionListener{
 		FlowLayout flowLayout = (FlowLayout) panel4.getLayout();
 		flowLayout.setVgap(90);
 		
-		JButton btn = new JButton("Continue");
+		btn = new JButton("Continue");
 		
 		btn.addActionListener(this);
 		
@@ -177,7 +180,7 @@ public class CreateGUI extends JFrame implements ActionListener{
 	    			networkSize = Integer.valueOf(txt.getText());
 	    		}
 	    		if(text.equals("Panel #3")){
-	    			//learningRate = BigDecimal.valueOf(Double.valueOf(txt.getText()));
+	    			learningRate = BigDecimal.valueOf(Double.valueOf(txt.getText()));
 	    		}
 	    		if(tabbedPane.getSelectedIndex() < 3){
 	    			tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
