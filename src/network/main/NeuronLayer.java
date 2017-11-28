@@ -148,6 +148,7 @@ public class NeuronLayer {
 	 * 	array of expected values for the inputs
 	 */
 	public void backPropInitial(BigDecimal[] expected){
+		
 		for(int i = 0; i < numberOfOutputs; i++){
 			errorDer[i] = output[i].getNeuron().subtract(expected[i], MathContext.DECIMAL64);
 			//System.out.println("ErrorDer : " + errorDer[i]);
@@ -267,6 +268,9 @@ public class NeuronLayer {
 	 * 	where f(x) = tanh(x)
 	 */
 	public BigDecimal tanHDer(BigDecimal input){
+		
+		input = BigDecimal.valueOf(Math.tanh(input.doubleValue()));
+		
 		return input.multiply(input, MathContext.DECIMAL64).subtract(BigDecimal.ONE, MathContext.DECIMAL64);
 	}
 	
@@ -330,5 +334,17 @@ public class NeuronLayer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void setLearningRate(BigDecimal val){
+		for(Neuron n : layerNeurons){
+			n.setLearningRate(val);
+		}
+		
+		this.learningRate = val;
+	}
+	
+	public BigDecimal getLearningRate(){
+		return learningRate;
 	}
 }

@@ -133,4 +133,16 @@ public class NeuralNetwork {
 			neuronLayer[i].writeOutInfo(i, newSave);
 		}
 	}
+
+	public void setLearningRate(BigDecimal val){
+		for(NeuronLayer n : neuronLayer){
+			n.setLearningRate(val);
+		}
+		
+		this.learningRate = val;
+	}
+
+	public BigDecimal getLearningRate(){
+		return learningRate;
+	}
 }
