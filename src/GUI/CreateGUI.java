@@ -59,6 +59,7 @@ public class CreateGUI extends JFrame implements ActionListener{
 	private String networkName;
 	private int networkSize;
 	private BigDecimal learningRate;
+	private JTextField[] txt = new JTextField[3];
 	/**
 	 * Create the frame.
 	 */
@@ -105,6 +106,12 @@ public class CreateGUI extends JFrame implements ActionListener{
 		contentPane.getActionMap().put("Set Changes", action);
 		contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, "Set Changes");
 		
+		for(int i = 0; i < txt.length; i++){
+			txt[i] = new JTextField("", 20);
+		    txt[i].setHorizontalAlignment(SwingConstants.CENTER);
+		    txt[i].setBackground(Color.WHITE);
+		}
+		
 		JPanel panel1 = makeTextPanel("Panel #1");
 		tabbedPane.addTab("Name", null, panel1, null);
 		
@@ -144,12 +151,18 @@ public class CreateGUI extends JFrame implements ActionListener{
 	    
 	    if(text.equals("Panel #1")){
 	    	tabLabel = new JLabel("Name");
+	    	txt[0].setText("New File " + (LoadGUI.getList().getModel().getSize() + 1));
+		    textPanel.add(txt[0]);
 		}
 	    else if(text.equals("Panel #2")){
 			tabLabel = new JLabel("Number of Layers");
+	    	txt[1].setText("2");
+		    textPanel.add(txt[1]);
 		}
 	    else if(text.equals("Panel #3")){
 			tabLabel = new JLabel("Learning Rate");
+	    	txt[2].setText(".05");
+		    textPanel.add(txt[2]);
 		}
 	    else{
 	    	tabLabel = new JLabel();
@@ -158,10 +171,6 @@ public class CreateGUI extends JFrame implements ActionListener{
 	    tabLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	    mainPanel.add(tabLabel, BorderLayout.CENTER);
 	    
-	    JTextField txt = new JTextField("", 20);
-	    textPanel.add(txt);
-	    txt.setHorizontalAlignment(SwingConstants.CENTER);
-	    txt.setBackground(Color.WHITE);
 
 	    JPanel ButtonPanel = new JPanel();
 		ButtonPanel.setBorder(new EmptyBorder(25, 10, 40, 25));
@@ -172,15 +181,15 @@ public class CreateGUI extends JFrame implements ActionListener{
 	    
 	    btnSetChanges.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		if(text.equals("Panel #1")){
-	    			Main.getFrame().insertElement(txt.getText()); //Adds the name typed in to the list on LoadGUI
-	    			networkName = txt.getText();
+	    		if(tabbedPane.getSelectedIndex() == 0){
+	    			Main.getFrame().insertElement(txt[tabbedPane.getSelectedIndex()].getText()); //Adds the name typed in to the list on LoadGUI
+	    			networkName = txt[tabbedPane.getSelectedIndex()].getText();
 	    		}
-	    		if(text.equals("Panel #2")){
-	    			networkSize = Integer.valueOf(txt.getText());
+	    		if(tabbedPane.getSelectedIndex() == 1){
+	    			networkSize = Integer.valueOf(txt[tabbedPane.getSelectedIndex()].getText());
 	    		}
-	    		if(text.equals("Panel #3")){
-	    			learningRate = BigDecimal.valueOf(Double.valueOf(txt.getText()));
+	    		if(tabbedPane.getSelectedIndex() == 2){
+	    			learningRate = BigDecimal.valueOf(Double.valueOf(txt[tabbedPane.getSelectedIndex()].getText()));
 	    		}
 	    		if(tabbedPane.getSelectedIndex() < 3){
 	    			tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);

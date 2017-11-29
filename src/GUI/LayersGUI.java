@@ -7,16 +7,22 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -36,8 +42,26 @@ public class LayersGUI extends JFrame implements ActionListener{
 	private String name;
 	private int networkSize;
 	private BigDecimal learningRate;
+	private JButton btn;
+	private JTextField[] txt;
+	private String[][] defaultValue;
+	private JLabel[] tabLabel;
 	
 	public LayersGUI(String name, int networkSize, BigDecimal learningRate) {
+		Action action = new AbstractAction("Set Layer Size"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(tabbedPane.getSelectedIndex() == tabbedPane.getTabCount() - 1)
+					btn.doClick();
+				else
+					btnSetLayerSize.doClick();
+			}
+		};
+		KeyStroke keyStroke;
+		keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		
 		this.name = name;
 		this.networkSize = networkSize;
 		this.learningRate = learningRate;
@@ -55,23 +79,37 @@ public class LayersGUI extends JFrame implements ActionListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 		
+		contentPane.getActionMap().put("Set Layer Size", action);
+		contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, "Set Layer Size");
+		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane);
 		
-		JPanel genPanel;
 		
+		txt = new JTextField[networkSize];
+		
+		for(int i = 0; i < txt.length; i++){
+			txt[i] = new JTextField("", 20);
+		    txt[i].setHorizontalAlignment(SwingConstants.CENTER);
+		    txt[i].setBackground(Color.WHITE);
+		}
+		
+		defaultValue = new String[networkSize][2];
+		tabLabel = new JLabel[networkSize];
 		for(int i = 0; i < networkSize; i++){
 			
-			genPanel = makeTextPanel("Panel #" + (i + 1));
-			
 			if(i == 0){
-				tabbedPane.addTab("Input", null, genPanel, null);
+				defaultValue[i][0] = "2";
+				defaultValue[i][1] = "Input";
+				tabbedPane.addTab(defaultValue[i][1], null, makeTextPanel("Panel #" + (i + 1)), null);
 			}
 			else if(i == networkSize - 1){
-				tabbedPane.addTab("Output", null, genPanel, null);
+				defaultValue[i][0] = "2";
+				defaultValue[i][1] = "Output";
+				tabbedPane.addTab(defaultValue[i][1], null, makeTextPanel("Panel #" + (i + 1)), null);
 			}
 			else{
-				tabbedPane.addTab("Layer " + i, null, genPanel, null);
+				tabbedPane.addTab("Layer " + i, null, makeTextPanel("Panel #" + (i + 1)), null);
 			}
 			
 		}
@@ -82,7 +120,7 @@ public class LayersGUI extends JFrame implements ActionListener{
 		FlowLayout flowLayout = (FlowLayout) panel4.getLayout();
 		flowLayout.setVgap(90);
 		
-		JButton btn = new JButton("Continue");
+		btn = new JButton("Continue");
 		
 		btn.addActionListener(this);
 		
@@ -102,13 +140,19 @@ public class LayersGUI extends JFrame implements ActionListener{
 	    panel.add(mainPanel, BorderLayout.CENTER);
 	    
 	    JPanel textPanel = new JPanel();
+	    
+	    for(int i = 0; i < networkSize; i++){
+	    	if(text.equals("Panel #" + (i + 1))){
+		    	tabLabel[i] = new JLabel(defaultValue[i][1]);
+		    	txt[i].setText(defaultValue[i][0]);
+			    textPanel.add(txt[i]);
+			    tabLabel[i].setHorizontalAlignment(SwingConstants.CENTER);
+			    mainPanel.add(tabLabel[i], BorderLayout.CENTER);
+			}
+	    }
+
 	    mainPanel.add(textPanel, BorderLayout.SOUTH);
 	    
-	    JTextField txt = new JTextField("", 20);
-	    textPanel.add(txt);
-	    txt.setHorizontalAlignment(SwingConstants.CENTER);
-	    txt.setBackground(Color.WHITE);
-
 	    JPanel ButtonPanel = new JPanel();
 		ButtonPanel.setBorder(new EmptyBorder(25, 10, 40, 25));
 		ButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
@@ -120,7 +164,7 @@ public class LayersGUI extends JFrame implements ActionListener{
 	    	public void actionPerformed(ActionEvent e) {
 	    		for(int i = 0; i < networkSize; i++){
 	    			if(text.equals("Panel #" + (i + 1))){
-	    				layer[i] = Integer.valueOf(txt.getText());
+	    				layer[i] = Integer.valueOf(txt[i].getText());
 	    			}
 	    		}
 	    		tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);

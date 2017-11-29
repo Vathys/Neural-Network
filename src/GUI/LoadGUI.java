@@ -21,7 +21,7 @@ public class LoadGUI extends JFrame implements ActionListener{
 	private JPanel contentPane;
 	private ArrayList<String> values = new ArrayList<String>();
 
-	private JList<String> list = new JList<String>();
+	private static JList<String> list = new JList<String>();
 	
 
 	private static JButton CreateButton = new JButton("Create");
@@ -120,5 +120,10 @@ public class LoadGUI extends JFrame implements ActionListener{
 	public static JButton getLoadButton() {
 		return LoadButton;
 	}
+
+	public static JList<String> getList() {
+		return list;
+	}
+	
 	
 }
