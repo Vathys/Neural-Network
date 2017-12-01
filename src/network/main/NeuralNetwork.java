@@ -8,12 +8,19 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import CSVWorker.CSVReader;
 import CSVWorker.CSVWriter;
 
 public class NeuralNetwork {
 	private int[] layers;
 	private BigDecimal learningRate;
 	private NeuronLayer[] neuronLayer;
+	
+	public NeuralNetwork(File base) throws FileNotFoundException{
+		
+		
+		
+	}
 	/**
 	 * Constructor
 	 * 

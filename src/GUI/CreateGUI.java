@@ -151,12 +151,20 @@ public class CreateGUI extends JFrame implements ActionListener{
 	    
 	    if(text.equals("Panel #1")){
 	    	tabLabel = new JLabel("Name");
-	    	txt[0].setText("New File " + (LoadGUI.getList().getModel().getSize() + 1));
+	    	int n = 1;
+	    	for(int i = 0; i < LoadGUI.getList().getModel().getSize(); i++){
+	    		if(LoadGUI.getList().getModel().getElementAt(i).length() > 9 && ((LoadGUI.getList().getModel().getElementAt(i)).substring(0,9)).equals("New File ")){
+	    			if(LoadGUI.getList().getModel().getElementAt(i).substring(9).equals(String.valueOf(n))){
+	    				n++;
+	    			}
+	    		}
+	    	}
+	    	txt[0].setText("New File " + String.valueOf(n));
 		    textPanel.add(txt[0]);
 		}
 	    else if(text.equals("Panel #2")){
 			tabLabel = new JLabel("Number of Layers");
-	    	txt[1].setText("2");
+	    	txt[1].setText("4");
 		    textPanel.add(txt[1]);
 		}
 	    else if(text.equals("Panel #3")){

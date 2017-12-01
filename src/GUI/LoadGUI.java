@@ -9,7 +9,9 @@ import network.main.NeuralNetwork;
 
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.awt.event.ActionEvent;
 
 public class LoadGUI extends JFrame implements ActionListener{
@@ -47,6 +49,24 @@ public class LoadGUI extends JFrame implements ActionListener{
 				System.out.println(listOfFiles[i].getName());
 			}
 		}
+		ArrayList<String> temp = new ArrayList<String>();
+		for(int j = 0; j < values.size(); j++){
+			if(!(values.get(j).length() > 9 && values.get(j).substring(0,9).equals("New File "))){ 
+				temp.add(values.get(j));
+				values.remove(j);
+				j--;
+			}
+		}
+		int n = 1;
+		for(int j = 0; j < values.size(); j++){
+			if(values.get(j).substring(9).equals(String.valueOf(n++))){
+				temp.add(values.get(j));
+				values.remove(j);
+				j = 0;
+			}
+		}
+		values = temp;
+		System.out.println(values);
 		list.setModel(new AbstractListModel<String>() {
 			private static final long serialVersionUID = 1L;
 			public int getSize() {
@@ -97,6 +117,13 @@ public class LoadGUI extends JFrame implements ActionListener{
 			});
 		}
 		if(e.getActionCommand().equals("Load")){
+			list.getSelectedValue();
+			try {
+				NeuralNetwork n = new NeuralNetwork(new File("Saved NN/" + list.getSelectedValue()));
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 

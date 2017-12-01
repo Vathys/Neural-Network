@@ -109,6 +109,8 @@ public class LayersGUI extends JFrame implements ActionListener{
 				tabbedPane.addTab(defaultValue[i][1], null, makeTextPanel("Panel #" + (i + 1)), null);
 			}
 			else{
+				defaultValue[i][0] = "2";
+				defaultValue[i][1] = "Layer " + String.valueOf(i);
 				tabbedPane.addTab("Layer " + i, null, makeTextPanel("Panel #" + (i + 1)), null);
 			}
 			
