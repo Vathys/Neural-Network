@@ -57,14 +57,15 @@ public class LoadGUI extends JFrame implements ActionListener{
 				j--;
 			}
 		}
-		int n = 1;
+		int n = 0;
 		for(int j = 0; j < values.size(); j++){
-			if(values.get(j).substring(9).equals(String.valueOf(n++))){
+			if(values.get(j).substring(9).equals(String.valueOf(++n))){
 				temp.add(values.get(j));
 				values.remove(j);
 				j = 0;
 			}
 		}
+		temp.add(values.get(0));
 		values = temp;
 		System.out.println(values);
 		list.setModel(new AbstractListModel<String>() {
