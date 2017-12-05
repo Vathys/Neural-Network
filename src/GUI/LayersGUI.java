@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -167,12 +169,14 @@ public class LayersGUI extends JFrame implements ActionListener{
 	    		for(int i = 0; i < networkSize; i++){
 	    			if(text.equals("Panel #" + (i + 1))){
 	    				layer[i] = Integer.valueOf(txt[i].getText());
+	    				System.out.println(layer[i]);
 	    			}
 	    		}
 	    		tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
+	    	    Main.setLayerSize(layer);
 	    	}
 	    });
-	    Main.setLayerSize(layer);
+	    
 		btnSetLayerSize.setPreferredSize(new Dimension(150, 40));
 		ButtonPanel.add(btnSetLayerSize);
 		
@@ -187,9 +191,10 @@ public class LayersGUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		NeuralNetwork nn = new NeuralNetwork(layer, learningRate);
+		NeuralNetwork nn = new NeuralNetwork(Main.getLayerSize(), learningRate);
 		
 		nn.initFile(name);
+		
 		this.setVisible(false);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

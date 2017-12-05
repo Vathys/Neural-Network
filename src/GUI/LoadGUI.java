@@ -57,15 +57,15 @@ public class LoadGUI extends JFrame implements ActionListener{
 				j--;
 			}
 		}
-		int n = 0;
-		for(int j = 0; j < values.size(); j++){
-			if(values.get(j).substring(9).equals(String.valueOf(++n))){
-				temp.add(values.get(j));
-				values.remove(j);
-				j = 0;
-			}
+		while(values.size() > 0){
+			int n = 0;
+			for(int j = 0; j < values.size(); j++){
+				if(values.get(j).substring(9).equals(String.valueOf(++n))){
+					temp.add(values.get(j));
+					values.remove(j);
+					j = 0;
+				}
 		}
-		temp.add(values.get(0));
 		values = temp;
 		System.out.println(values);
 		list.setModel(new AbstractListModel<String>() {
@@ -98,7 +98,7 @@ public class LoadGUI extends JFrame implements ActionListener{
 		CreateButton.setPreferredSize(new Dimension(150, 40));
 		CreateButton.setActionCommand("Create");
 		ButtonPanel.add(CreateButton);
-		
+		}
 	}
 	
 	public void actionPerformed(ActionEvent e){

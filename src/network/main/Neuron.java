@@ -296,7 +296,6 @@ public class Neuron {
 				System.out.println(neuronCSV.createNewFile());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 		
