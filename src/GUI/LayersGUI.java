@@ -39,8 +39,8 @@ public class LayersGUI extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane tabbedPane;
 	private JPanel contentPane;
-	private JButton btnSetLayerSize;
-	private int[] layer;
+	private JButton[] btnSetLayerSize;
+	private static int[] layer;
 	private String name;
 	private int networkSize;
 	private BigDecimal learningRate;
@@ -58,7 +58,7 @@ public class LayersGUI extends JFrame implements ActionListener{
 				if(tabbedPane.getSelectedIndex() == tabbedPane.getTabCount() - 1)
 					btn.doClick();
 				else
-					btnSetLayerSize.doClick();
+					btnSetLayerSize[tabbedPane.getSelectedIndex()].doClick();
 			}
 		};
 		KeyStroke keyStroke;
@@ -89,6 +89,7 @@ public class LayersGUI extends JFrame implements ActionListener{
 		
 		
 		txt = new JTextField[networkSize];
+		btnSetLayerSize = new JButton[networkSize];
 		
 		for(int i = 0; i < txt.length; i++){
 			txt[i] = new JTextField("", 20);
@@ -145,6 +146,10 @@ public class LayersGUI extends JFrame implements ActionListener{
 	    
 	    JPanel textPanel = new JPanel();
 	    
+	    JPanel ButtonPanel = new JPanel();
+		ButtonPanel.setBorder(new EmptyBorder(25, 10, 40, 25));
+		ButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+	    
 	    for(int i = 0; i < networkSize; i++){
 	    	if(text.equals("Panel #" + (i + 1))){
 		    	tabLabel[i] = new JLabel(defaultValue[i][1]);
@@ -152,34 +157,24 @@ public class LayersGUI extends JFrame implements ActionListener{
 			    textPanel.add(txt[i]);
 			    tabLabel[i].setHorizontalAlignment(SwingConstants.CENTER);
 			    mainPanel.add(tabLabel[i], BorderLayout.CENTER);
+			    btnSetLayerSize[i] = new JButton("Set Layer Size"); 
+			    btnSetLayerSize[i].addActionListener(new ActionListener() {
+			    	public void actionPerformed(ActionEvent e) {
+			    		for(int i = 0; i < networkSize; i++){
+			    			if(text.equals("Panel #" + (i + 1))){
+			    				layer[i] = Integer.valueOf(txt[i].getText());
+			    			}
+			    		}
+			    		tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
+			    	}
+			    });
+			    btnSetLayerSize[i].setPreferredSize(new Dimension(150, 40));
+				ButtonPanel.add(btnSetLayerSize[i]);
 			}
 	    }
 
 	    mainPanel.add(textPanel, BorderLayout.SOUTH);
 	    
-	    JPanel ButtonPanel = new JPanel();
-		ButtonPanel.setBorder(new EmptyBorder(25, 10, 40, 25));
-		ButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
-		
-
-	    btnSetLayerSize = new JButton("Set Layer Size");
-	    
-	    btnSetLayerSize.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent e) {
-	    		for(int i = 0; i < networkSize; i++){
-	    			if(text.equals("Panel #" + (i + 1))){
-	    				layer[i] = Integer.valueOf(txt[i].getText());
-	    				System.out.println(layer[i]);
-	    			}
-	    		}
-	    		tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
-	    	    Main.setLayerSize(layer);
-	    	}
-	    });
-	    
-		btnSetLayerSize.setPreferredSize(new Dimension(150, 40));
-		ButtonPanel.add(btnSetLayerSize);
-		
 		panel.add(ButtonPanel, BorderLayout.SOUTH);
 		
 	    return panel;
@@ -191,7 +186,7 @@ public class LayersGUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		NeuralNetwork nn = new NeuralNetwork(Main.getLayerSize(), learningRate);
+		NeuralNetwork nn = new NeuralNetwork(layer, learningRate);
 		
 		nn.initFile(name);
 		

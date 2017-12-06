@@ -293,7 +293,7 @@ public class Neuron {
 		if(status != NeuralStatus.Output){
 			File neuronCSV = new File(path.getAbsolutePath() + "/" + "Neuron " + neuron + ".csv");
 			try {
-				System.out.println(neuronCSV.createNewFile());
+				neuronCSV.createNewFile();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 			}

@@ -46,7 +46,6 @@ public class LoadGUI extends JFrame implements ActionListener{
 		for(int i = 0; i < listOfFiles.length; i++){
 			if(listOfFiles[i].exists() && !listOfFiles[i].getName().equals(".DS_Store")){
 				values.add(listOfFiles[i].getName());
-				System.out.println(listOfFiles[i].getName());
 			}
 		}
 		ArrayList<String> temp = new ArrayList<String>();
@@ -57,17 +56,21 @@ public class LoadGUI extends JFrame implements ActionListener{
 				j--;
 			}
 		}
+		int n = 0;
 		while(values.size() > 0){
-			int n = 0;
+			int initSize = values.size();
 			for(int j = 0; j < values.size(); j++){
-				if(values.get(j).substring(9).equals(String.valueOf(++n))){
+				if(values.get(j).substring(9).equals(String.valueOf(n))){
 					temp.add(values.get(j));
 					values.remove(j);
 					j = 0;
 				}
+			}
+			if(initSize >= values.size()){
+				n++;
+			}
 		}
 		values = temp;
-		System.out.println(values);
 		list.setModel(new AbstractListModel<String>() {
 			private static final long serialVersionUID = 1L;
 			public int getSize() {
@@ -98,7 +101,6 @@ public class LoadGUI extends JFrame implements ActionListener{
 		CreateButton.setPreferredSize(new Dimension(150, 40));
 		CreateButton.setActionCommand("Create");
 		ButtonPanel.add(CreateButton);
-		}
 	}
 	
 	public void actionPerformed(ActionEvent e){
