@@ -16,10 +16,19 @@ public class NeuralNetwork {
 	private BigDecimal learningRate;
 	private NeuronLayer[] neuronLayer;
 	
-	public NeuralNetwork(File base) throws FileNotFoundException{
+	public NeuralNetwork(File base) throws IOException{
+		File[] childs = base.listFiles();
+		neuronLayer = new NeuronLayer[childs.length];
 		
+		for(int i = 0; i < childs.length; i++){
+			System.out.println("\t" + childs[i].getName());
+			neuronLayer[i] = new NeuronLayer(childs[i]);
+		}
 		
-		
+		/*layers = new int[neuronLayer.length];
+		for(int i = 0; i < layers.length; i++){
+			layers[i] = neuronLayer[i].getLayerNeurons().length;
+		}*/
 	}
 	
 	/**

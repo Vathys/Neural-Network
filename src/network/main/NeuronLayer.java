@@ -1,11 +1,13 @@
 package network.main;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import CSVWorker.CSVReader;
 import CSVWorker.CSVWriter;
 
 public class NeuronLayer {
@@ -21,6 +23,18 @@ public class NeuronLayer {
 	
 	private int numberOfOutputs;
 	private Neuron[] output;
+
+	public NeuronLayer(File layerBase) throws IOException{
+		File[] files = layerBase.listFiles();
+		
+		CSVReader r = new CSVReader(files[0].getAbsolutePath());
+		
+		for(String s : r.getValues()){
+			System.out.println(s);
+		}
+		
+		
+	}
 	
 	/**
 	 * Constructor 

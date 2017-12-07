@@ -10,6 +10,7 @@ import network.main.NeuralNetwork;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.awt.event.ActionEvent;
@@ -36,9 +37,9 @@ public class LoadGUI extends JFrame implements ActionListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 500);
 		contentPane = new JPanel();
+		contentPane.setLayout(new BorderLayout());
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
 
 		File folder = new File("Saved NN");
 		File[] listOfFiles = folder.listFiles();
@@ -81,13 +82,20 @@ public class LoadGUI extends JFrame implements ActionListener{
 			}
 		});
 		
-		list.setBorder(new TitledBorder(null, "TestList", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		contentPane.add(list);
+		list.setBounds(5, 7, 474, 335);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		
+		JScrollPane scrollPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.add(new JScrollBar(JScrollBar.VERTICAL));
+		scrollPane.add(new JScrollBar(JScrollBar.HORIZONTAL));
+		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
 		JPanel ButtonPanel = new JPanel();
+		ButtonPanel.setBounds(5, 342, 474, 115);
 		ButtonPanel.setBorder(new EmptyBorder(25, 10, 40, 25));
-		contentPane.add(ButtonPanel, BorderLayout.SOUTH);
 		ButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+		contentPane.add(ButtonPanel, BorderLayout.SOUTH);
 		
 		LoadButton.addActionListener(this);
 		LoadButton.setPreferredSize(new Dimension(150, 40));
@@ -101,6 +109,7 @@ public class LoadGUI extends JFrame implements ActionListener{
 		CreateButton.setPreferredSize(new Dimension(150, 40));
 		CreateButton.setActionCommand("Create");
 		ButtonPanel.add(CreateButton);
+		
 	}
 	
 	public void actionPerformed(ActionEvent e){
@@ -123,7 +132,7 @@ public class LoadGUI extends JFrame implements ActionListener{
 			list.getSelectedValue();
 			try {
 				NeuralNetwork n = new NeuralNetwork(new File("Saved NN/" + list.getSelectedValue()));
-			} catch (FileNotFoundException e1) {
+			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
